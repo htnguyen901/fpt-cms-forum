@@ -8,118 +8,109 @@ using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
 
-namespace LearningSystem.web.Controllers
+namespace Events.web.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    public class DepartmentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Categoriess
+        // GET: Admin/Departments
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            return View(db.Departments.ToList());
         }
 
-        // GET: Categoriess/Details/5
+        // GET: Admin/Departments/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            //var Categories2 = db.Categoriess.Where(c => c.Id == id.Value).Include(i => i.CategoriesInstructor.Id;
-            //Categories Categories = db.Categoriess.AsQueryable<Categoriess>().Select(x => x.id == id.Value);
-            string query = "Select dbo.AspNetUsers.UserName from dbo.AspNetUsers,dbo.Categoriess where (dbo.AspNetUsers.Id = dbo.Categoriess.Instructor) AND (dbo.Categoriess.Id = " + id.Value + ")";
-            var queryResult = db.Database.SqlQuery<string>(query);
-            string name = queryResult.FirstOrDefault();
-            if (name == null) name = "Not Assigned";
-            if (Categories == null)
+            Department department = db.Departments.Find(id);
+            if (department == null)
             {
                 return HttpNotFound();
             }
-
-            ViewBag.instructor_name = name;
-            return View(Categories);
+            return View(department);
         }
 
-
-        // GET: Categoriess/Create
+        // GET: Admin/Departments/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Admin/Departments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,CategoryId")] Category Categories)
+        public ActionResult Create([Bind(Include = "DepartmentId,DepartmentName")] Department department)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(Categories);
+                db.Departments.Add(department);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(Categories);
+            return View(department);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Admin/Departments/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            if (Categories == null)
+            Department department = db.Departments.Find(id);
+            if (department == null)
             {
                 return HttpNotFound();
             }
-            return View(Categories);
+            return View(department);
         }
 
-        // POST: Categoriess/Edit/5
+        // POST: Admin/Departments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,CategoryId")] Category Categories)
+        public ActionResult Edit([Bind(Include = "DepartmentId,DepartmentName")] Department department)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(Categories).State = EntityState.Modified;
+                db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(Categories);
+            return View(department);
         }
 
-        // GET: Categoriess/Delete/5
+        // GET: Admin/Departments/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            if (Categories == null)
+            Department department = db.Departments.Find(id);
+            if (department == null)
             {
                 return HttpNotFound();
             }
-            return View(Categories);
+            return View(department);
         }
 
-        // POST: Categoriess/Delete/5
+        // POST: Admin/Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category Categories = db.Categories.Find(id);
-            db.Categories.Remove(Categories);
+            Department department = db.Departments.Find(id);
+            db.Departments.Remove(department);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

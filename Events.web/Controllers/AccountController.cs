@@ -183,14 +183,8 @@ namespace Events.web.Controllers
                     user = new ApplicationUser
                     {
                         FullName = model.FullName,
-                        Age = model.Age,
-                        DateofBirth = model.DateofBirth,
-                        Education = model.Education,
-                        ToeicScore = model.ToeicScore,
-                        Location = model.Location,
-                        UserName = model.Email,
-                        Email = model.Email,
-                        Role = model.Role
+                        StaffId = model.StaffId,
+                        Role = model.Role,
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)

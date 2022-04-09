@@ -5,30 +5,14 @@ using System.Linq;
 using System.Web.Mvc;
 namespace Events.web.Controllers
 {
-    [MyCustomAuthorize(Roles = "Administrator")] //Set role for admin only
+    [MyCustomAuthorize(Roles = "Administrator, QAManager")] //Set role for admin only
     public class AdminController : BaseController //Announce class 'AdminController' from 'BaseController'
     {
-        public ActionResult Trainer() //Publicly get action of 'Trainer' to set in other files
+        public ActionResult QACoordinator() //Publicly get action of 'Trainer' to set in other files
         {
-            List<ApplicationUser> Trainers = new List<ApplicationUser>();
+            List<ApplicationUser> QACoor = new List<ApplicationUser>();
             var role = Db.Roles
-                .Where(r => r.Name == "Trainer")
-                .FirstOrDefault();
-            if (role != null)
-            {
-                var users = Db.Users
-                    .Where(u => u.Roles.Select(r => r.RoleId).Contains(role.Id))
-                    .ToList();
-                return View(users);
-            }
-            return View();
-        }
-
-        public ActionResult TrainingStaff() //Publicly get action of 'TrainingStaff' to set in other files
-        {
-            List<ApplicationUser> Trainers = new List<ApplicationUser>();
-            var role = Db.Roles
-                .Where(r => r.Name == "TrainingStaff")
+                .Where(r => r.Name == "QACoordinator")
                 .FirstOrDefault();
             if (role != null)
             {
@@ -68,11 +52,7 @@ namespace Events.web.Controllers
             if (user != null && this.ModelState.IsValid)
             {
                 accountToEdit.FullName = user.FullName;
-                accountToEdit.Age = user.Age;
-                accountToEdit.DateofBirth = user.DateofBirth;
-                accountToEdit.Education = user.Education;
-                accountToEdit.ToeicScore = user.ToeicScore;
-                accountToEdit.Location = user.Location;
+                accountToEdit.StaffId = user.StaffId;
 
                 this.Db.SaveChanges();
                 return RedirectToAction("Index", "Home");
@@ -90,16 +70,6 @@ namespace Events.web.Controllers
                 return Redirect(url);
             }
             Db.Users.Remove(user);
-            var assign = Db.CoursesAssigned
-                .Where(a => a.UserId == id)
-                .ToList();
-            if (assign != null)
-            {
-                foreach (var item in assign)
-                {
-                    Db.CoursesAssigned.Remove(item);
-                }
-            }
             Db.SaveChanges();
             return Redirect(url);
         }

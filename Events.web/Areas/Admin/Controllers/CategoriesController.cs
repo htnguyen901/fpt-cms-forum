@@ -8,118 +8,109 @@ using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
 
-namespace LearningSystem.web.Controllers
+namespace Events.web.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoriesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Categoriess
+        // GET: Admin/Categories
         public ActionResult Index()
         {
             return View(db.Categories.ToList());
         }
 
-        // GET: Categoriess/Details/5
+        // GET: Admin/Categories/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            //var Categories2 = db.Categoriess.Where(c => c.Id == id.Value).Include(i => i.CategoriesInstructor.Id;
-            //Categories Categories = db.Categoriess.AsQueryable<Categoriess>().Select(x => x.id == id.Value);
-            string query = "Select dbo.AspNetUsers.UserName from dbo.AspNetUsers,dbo.Categoriess where (dbo.AspNetUsers.Id = dbo.Categoriess.Instructor) AND (dbo.Categoriess.Id = " + id.Value + ")";
-            var queryResult = db.Database.SqlQuery<string>(query);
-            string name = queryResult.FirstOrDefault();
-            if (name == null) name = "Not Assigned";
-            if (Categories == null)
+            Category category = db.Categories.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-
-            ViewBag.instructor_name = name;
-            return View(Categories);
+            return View(category);
         }
 
-
-        // GET: Categoriess/Create
+        // GET: Admin/Categories/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Admin/Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,CategoryId")] Category Categories)
+        public ActionResult Create([Bind(Include = "CategoryId,CategoryName,CategoryDescription")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(Categories);
+                db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(Categories);
+            return View(category);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Admin/Categories/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            if (Categories == null)
+            Category category = db.Categories.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            return View(Categories);
+            return View(category);
         }
 
-        // POST: Categoriess/Edit/5
+        // POST: Admin/Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,CategoryId")] Category Categories)
+        public ActionResult Edit([Bind(Include = "CategoryId,CategoryName,CategoryDescription")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(Categories).State = EntityState.Modified;
+                db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(Categories);
+            return View(category);
         }
 
-        // GET: Categoriess/Delete/5
+        // GET: Admin/Categories/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category Categories = db.Categories.Find(id);
-            if (Categories == null)
+            Category category = db.Categories.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            return View(Categories);
+            return View(category);
         }
 
-        // POST: Categoriess/Delete/5
+        // POST: Admin/Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category Categories = db.Categories.Find(id);
-            db.Categories.Remove(Categories);
+            Category category = db.Categories.Find(id);
+            db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

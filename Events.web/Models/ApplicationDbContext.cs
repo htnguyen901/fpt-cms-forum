@@ -11,6 +11,7 @@ namespace Events.web.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public IDbSet<Category> Categories { get; set; }
 
         public IDbSet<Department> Departments { get; set; }
@@ -28,5 +29,6 @@ namespace Events.web.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }

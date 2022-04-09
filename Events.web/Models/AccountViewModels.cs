@@ -68,23 +68,8 @@ namespace Events.web.Models
         [Display(Name = "FullName")]
         public string FullName { get; set; }
 
-        [Display(Name = "Age")]
-        public int Age { get; set; }
-
-        [Display(Name = "DateofBirth")]
-        public DateTime DateofBirth { get; set; }
-
-        [StringLength(100, ErrorMessage = "Education error")]
-        [Display(Name = "Education")]
-        public string Education { get; set; }
-
-        [StringLength(100, ErrorMessage = "Score must be a number")]
-        [Display(Name = "Toeic Score")]
-        public string ToeicScore { get; set; }
-
-        [StringLength(100, ErrorMessage = "Location error")]
-        [Display(Name = "Location")]
-        public string Location { get; set; }
+        [Display(Name = "StaffId")]
+        public int StaffId { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Error email")]
@@ -104,7 +89,9 @@ namespace Events.web.Models
         public string ConfirmPassword { get; set; }
 
         public string Role { get; set; }
-    }
+
+        public int DepartmentId { get; set; }
+    }   
 
     public class ResetPasswordViewModel
     {
