@@ -18,9 +18,12 @@ namespace Events.web.Models
 
         public int StaffId { get; set; }
 
-        public string Role { get; set; }
+        public string RoleId { get; set; }
 
-        public virtual Department Department { get; set; }
+        public int DepartmentId { get; set; }
+
+
+        public virtual Department Departments { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

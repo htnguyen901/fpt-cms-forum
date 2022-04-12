@@ -143,10 +143,10 @@ namespace Events.web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            if (User.IsInRole("TrainingStaff"))
+            if (User.IsInRole("QACoordinator"))
             {
                 var role = Db.Roles
-                    .Where(r => r.Name == "Trainee")
+                    .Where(r => r.Name == "Staff")
                     .ToList();
                 ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
                 return View();
@@ -154,16 +154,17 @@ namespace Events.web.Controllers
             if (User.IsInRole("Administrator"))
             {
                 var role = Db.Roles
-                    .Where(r => r.Name == "Trainer")
+                    .Where(r => r.Name == "QACoordinator")
                     .ToList();
-                var trainrole = Db.Roles
-                    .Where(r => r.Name == "TrainingStaff")
+                var managerrole = Db.Roles
+                    .Where(r => r.Name == "QAManager")
                     .FirstOrDefault();
-                role.Add(trainrole);
+                role.Add(managerrole);
                 ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
                 return View();
             }
             ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
+            ViewBag.Department = new SelectList(Db.Departments, "Name", "Name");
             return View();
         }
 
@@ -180,16 +181,19 @@ namespace Events.web.Controllers
             {
                 if(!userExist(user.Id))
                 {
+
                     user = new ApplicationUser
                     {
+                        UserName = user.Email,
+                        Email = user.Email,
                         FullName = model.FullName,
                         StaffId = model.StaffId,
-                        Role = model.Role,
+                        DepartmentId = model.Department.DepartmentId
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        await this.UserManager.AddToRoleAsync(user.Id, model.Role);
+                        await this.UserManager.AddToRoleAsync(user.Id, model.RoleName);
 
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
@@ -200,6 +204,8 @@ namespace Events.web.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     AddErrors(result);
+                    Db.Users.Add(user);
+                    Db.SaveChanges();
                 }
                 else
                 {
@@ -208,9 +214,9 @@ namespace Events.web.Controllers
                 
                 
             }
-
             // If we got this far, something failed, redisplay form
             ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
+            ViewBag.Department = new SelectList(Db.Departments, "Name", "Name");
             return View(model);
         }
 

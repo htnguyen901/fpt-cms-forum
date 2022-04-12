@@ -1,12 +1,11 @@
 ﻿@model IEnumerable<Events.web.Models.ApplicationUser>
 @{
-    ViewBag.Title = "QACoordinator";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Users";
 }
 <h2>Trainer</h2>
 
 <p>
-    @Html.ActionLink("Create", "Register", "Account")
+    @Html.ActionLink("Create", "Register", "Account", new {area=""}, new {} )
 </p>
 
 <table class="table">
@@ -18,7 +17,7 @@
             @Html.DisplayNameFor(model => model.FullName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Role)
+            @Html.DisplayNameFor(model => model.Roles)
         </th>
 
     </tr>
@@ -32,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Role)
+                @Html.DisplayFor(modelItem => item.Roles)
             </td>
 
             <td>

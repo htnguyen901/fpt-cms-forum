@@ -1,18 +1,19 @@
-﻿using Events.web.Models;
+﻿using Events.web.Controllers;
+using Events.web.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-namespace Events.web.Controllers
+namespace Events.web.Areas.Admin.Controllers
 {
     [MyCustomAuthorize(Roles = "Administrator, QAManager")] //Set role for admin only
-    public class AdminController : BaseController //Announce class 'AdminController' from 'BaseController'
+    public class UsersController : BaseController //Announce class 'AdminController' from 'BaseController'
     {
-        public ActionResult QACoordinator() //Publicly get action of 'Trainer' to set in other files
+        public ActionResult Index() //Publicly get action of 'Users' to set in other files
         {
             List<ApplicationUser> QACoor = new List<ApplicationUser>();
             var role = Db.Roles
-                .Where(r => r.Name == "QACoordinator")
+                .Where(r => r.Name == "QACoordinator, QAManager")
                 .FirstOrDefault();
             if (role != null)
             {
@@ -21,7 +22,7 @@ namespace Events.web.Controllers
                     .ToList();
                 return View(users);
             }
-            return View();
+            return View(QACoor);
         }
 
         [HttpGet] //Send data using a query string

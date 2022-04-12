@@ -257,7 +257,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -273,13 +273,27 @@
     <Compile Include="Migrations\202204091332467_AddAdminAcc1.designer.cs">
       <DependentUpon>202204091332467_AddAdminAcc1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204120726383_AddModels.cs" />
+    <Compile Include="Migrations\202204120726383_AddModels.designer.cs">
+      <DependentUpon>202204120726383_AddModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204120830498_ChangeAdminAcc.cs" />
+    <Compile Include="Migrations\202204120830498_ChangeAdminAcc.designer.cs">
+      <DependentUpon>202204120830498_ChangeAdminAcc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\DbMigrationsConfig.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\File.cs" />
+    <Compile Include="Models\Idea.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Reaction.cs" />
+    <Compile Include="Models\Submission.cs" />
+    <Compile Include="Models\View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -311,6 +325,8 @@
     <Content Include="Areas\Admin\Views\Categories\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Categories\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Categories\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -367,17 +383,17 @@
     <Content Include="Views\TrainingStaff\CourseCategory.cshtml" />
     <Content Include="Views\TrainingStaff\CourseCategoryCreate.cshtml" />
     <Content Include="Views\TrainingStaff\CourseCreate.cshtml" />
-    <Content Include="Areas\Admin\Views\Admin\Role.cshtml" />
-    <Content Include="Areas\Admin\Views\Admin\RoleCreate.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\RoleCreate.cshtml" />
     <Content Include="Views\TrainingStaff\AssignTrainerToCourse.cshtml" />
     <Content Include="Views\TrainingStaff\Trainer.cshtml" />
     <Content Include="Views\TrainingStaff\Edit.cshtml" />
     <Content Include="Views\TrainingStaff\Trainee.cshtml" />
     <Content Include="Views\Train\CourseAssigned.cshtml" />
     <Content Include="Views\Train\Course.cshtml" />
-    <Content Include="Areas\Admin\Views\Admin\QACoordinator.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
     <Content Include="Views\TrainingStaff\AssignTraineeToCourse.cshtml" />
-    <Content Include="Areas\Admin\Views\Admin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Edit.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
@@ -409,6 +425,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204091332467_AddAdminAcc1.resx">
       <DependentUpon>202204091332467_AddAdminAcc1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204120726383_AddModels.resx">
+      <DependentUpon>202204120726383_AddModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204120830498_ChangeAdminAcc.resx">
+      <DependentUpon>202204120830498_ChangeAdminAcc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

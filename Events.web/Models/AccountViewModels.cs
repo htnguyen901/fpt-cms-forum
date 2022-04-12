@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -88,9 +89,12 @@ namespace Events.web.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string Role { get; set; }
+        public string RoleName { get; set; }
 
-        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
+        public IdentityRole AspNetRoles { get; set; }
+
+        public Department Department { get; set; }
     }   
 
     public class ResetPasswordViewModel

@@ -42,7 +42,7 @@ namespace Events.web.Migrations
             {
                 UserName = adminUserName,
                 FullName = adminFullName,
-                Email = adminEmail,
+                Email = adminEmail
             };
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
