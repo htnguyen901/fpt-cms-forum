@@ -10,6 +10,7 @@ namespace Events.web.Models
     {
         [Key]
         public string UserId { get; set; }
+        
         public int IdeaId { get; set; }
         public DateTime LastVisitedDate { get; set; }
 

@@ -7,18 +7,18 @@ namespace Events.web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class AddAdminAcc : IMigrationMetadata
+    public sealed partial class updateSeedAcc : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddAdminAcc));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(updateSeedAcc));
         
         string IMigrationMetadata.Id
         {
-            get { return "202204091329526_AddAdminAcc"; }
+            get { return "202204131446337_updateSeedAcc"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

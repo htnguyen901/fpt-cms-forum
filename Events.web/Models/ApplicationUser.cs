@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,11 +19,9 @@ namespace Events.web.Models
 
         public int StaffId { get; set; }
 
-        public string RoleId { get; set; }
+        public string Role { get; set; }
 
         public int DepartmentId { get; set; }
-
-
         public virtual Department Departments { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

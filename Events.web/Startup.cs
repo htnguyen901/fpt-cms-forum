@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using Events.web.Migrations;
+using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(Events.web.Startup))]
@@ -11,4 +12,5 @@ namespace Events.web
             ConfigureAuth(app);
         }
     }
+
 }

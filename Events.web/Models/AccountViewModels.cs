@@ -89,12 +89,9 @@ namespace Events.web.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string RoleName { get; set; }
+        public string Role { get; set; }
 
-        public string DepartmentName { get; set; }
-        public IdentityRole AspNetRoles { get; set; }
-
-        public Department Department { get; set; }
+        public int DepartmentId { get; set; }
     }   
 
     public class ResetPasswordViewModel

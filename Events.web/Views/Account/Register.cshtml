@@ -62,18 +62,17 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Label("Select type", new { @class = "col-md-2 control-label" })
+        @Html.Label("Select Role", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownList("Role")
-            @Html.ValidationMessageFor(m => m.RoleName, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
         </div>
     </div>
-
     <div class="form-group">
-        @Html.Label("Select type", new { @class = "col-md-2 control-label" })
+        @Html.Label("Select Department", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownList("Department")
-            @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.DepartmentId, "", new { @class = "text-danger" })
         </div>
     </div>
 

@@ -13,12 +13,12 @@ namespace Events.web.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202204091325464_initial"; }
+            get { return "202204131412354_initial"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddAdminAcc1 : DbMigration
+    public partial class updateSeedAcc : DbMigration
     {
         public override void Up()
         {

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Events.web.Models.Submission>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SubmissionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubmissionDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClosureDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FinalClosureDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubmissionName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubmissionDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClosureDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SubmissionId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SubmissionId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SubmissionId })
+        </td>
+    </tr>
+}
+
+</table>

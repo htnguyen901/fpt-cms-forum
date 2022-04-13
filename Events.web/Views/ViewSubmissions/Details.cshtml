@@ -1,0 +1,51 @@
+﻿@model Events.web.Models.Submission
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Submission</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SubmissionName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubmissionName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SubmissionDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubmissionDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClosureDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClosureDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinalClosureDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinalClosureDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SubmissionId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

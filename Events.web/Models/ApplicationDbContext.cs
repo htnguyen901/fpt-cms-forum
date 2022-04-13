@@ -25,10 +25,6 @@ namespace Events.web.Models
 
         public virtual DbSet<View> Views { get; set; }
 
-        //public IDbSet<CourseCategory> CourseCategories { get; set; }
-
-        //public IDbSet<CoursesAssigned> CoursesAssigned { get; set; }
-
         public ApplicationDbContext()
             : base("CMSEntities", throwIfV1Schema: false)
         {

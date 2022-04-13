@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Events.web.Models;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace Events.web.Controllers
 {
@@ -143,32 +144,11 @@ namespace Events.web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            if (User.IsInRole("QACoordinator"))
-            {
-                var role = Db.Roles
-                    .Where(r => r.Name == "Staff")
-                    .ToList();
-                ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-                return View();
-            }
-            if (User.IsInRole("Administrator"))
-            {
-                var role = Db.Roles
-                    .Where(r => r.Name == "QACoordinator")
-                    .ToList();
-                var managerrole = Db.Roles
-                    .Where(r => r.Name == "QAManager")
-                    .FirstOrDefault();
-                role.Add(managerrole);
-                ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-                return View();
-            }
-            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-            ViewBag.Department = new SelectList(Db.Departments, "Name", "Name");
+            ViewBag.Role = new SelectList(Db.Roles, "Id", "Name");
+            ViewBag.Department = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
             return View();
         }
 
-        private bool userExist(string id) { return Db.Users.Any(x => x.Id == id); }
 
         //
         // POST: /Account/Register
@@ -177,23 +157,21 @@ namespace Events.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model, ApplicationUser user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if(!userExist(user.Id))
+                if (ModelState.IsValid)
                 {
 
                     user = new ApplicationUser
                     {
-                        UserName = user.Email,
-                        Email = user.Email,
-                        FullName = model.FullName,
-                        StaffId = model.StaffId,
-                        DepartmentId = model.Department.DepartmentId
+                        UserName = model.Email,
+                        Email = model.Email,
+                        Role = model.Role
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        await this.UserManager.AddToRoleAsync(user.Id, model.RoleName);
+                        await this.UserManager.AddToRoleAsync(user.Id, model.Role);
 
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
@@ -206,17 +184,26 @@ namespace Events.web.Controllers
                     AddErrors(result);
                     Db.Users.Add(user);
                     Db.SaveChanges();
+
                 }
-                else
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
                 {
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
                 }
-                
-                
+                throw;
             }
             // If we got this far, something failed, redisplay form
-            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-            ViewBag.Department = new SelectList(Db.Departments, "Name", "Name");
+            ViewBag.Role = new SelectList(Db.Roles, "Id", "Name");
+            ViewBag.Department = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
             return View(model);
         }
 

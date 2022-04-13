@@ -250,36 +250,31 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoriesController.cs" />
     <Compile Include="Areas\Admin\Controllers\DepartmentsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SubmissionsController.cs" />
     <Compile Include="Areas\QACoor\QACoorAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IdeasController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ViewSubmissionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202204091325464_initial.cs" />
-    <Compile Include="Migrations\202204091325464_initial.designer.cs">
-      <DependentUpon>202204091325464_initial.cs</DependentUpon>
+    <Compile Include="Migrations\202204131412354_initial.cs" />
+    <Compile Include="Migrations\202204131412354_initial.designer.cs">
+      <DependentUpon>202204131412354_initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202204091329526_AddAdminAcc.cs" />
-    <Compile Include="Migrations\202204091329526_AddAdminAcc.designer.cs">
-      <DependentUpon>202204091329526_AddAdminAcc.cs</DependentUpon>
+    <Compile Include="Migrations\202204131436558_updateAppUser.cs" />
+    <Compile Include="Migrations\202204131436558_updateAppUser.designer.cs">
+      <DependentUpon>202204131436558_updateAppUser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202204091332467_AddAdminAcc1.cs" />
-    <Compile Include="Migrations\202204091332467_AddAdminAcc1.designer.cs">
-      <DependentUpon>202204091332467_AddAdminAcc1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204120726383_AddModels.cs" />
-    <Compile Include="Migrations\202204120726383_AddModels.designer.cs">
-      <DependentUpon>202204120726383_AddModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202204120830498_ChangeAdminAcc.cs" />
-    <Compile Include="Migrations\202204120830498_ChangeAdminAcc.designer.cs">
-      <DependentUpon>202204120830498_ChangeAdminAcc.cs</DependentUpon>
+    <Compile Include="Migrations\202204131446337_updateSeedAcc.cs" />
+    <Compile Include="Migrations\202204131446337_updateSeedAcc.designer.cs">
+      <DependentUpon>202204131446337_updateSeedAcc.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\DbMigrationsConfig.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -327,6 +322,11 @@
     <Content Include="Areas\Admin\Views\Categories\Index.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Submissions\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Submissions\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Submissions\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Submissions\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Submissions\Index.cshtml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -399,6 +399,13 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Views\TrainingStaff\Details.cshtml" />
     <Content Include="Views\TrainingStaff\Delete.cshtml" />
+    <Content Include="Views\Ideas\Create.cshtml" />
+    <Content Include="Views\Ideas\Delete.cshtml" />
+    <Content Include="Views\Ideas\Details.cshtml" />
+    <Content Include="Views\Ideas\Edit.cshtml" />
+    <Content Include="Views\Ideas\Index.cshtml" />
+    <Content Include="Views\ViewSubmissions\Index.cshtml" />
+    <Content Include="Views\ViewSubmissions\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
@@ -417,20 +424,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202204091325464_initial.resx">
-      <DependentUpon>202204091325464_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202204131412354_initial.resx">
+      <DependentUpon>202204131412354_initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204091329526_AddAdminAcc.resx">
-      <DependentUpon>202204091329526_AddAdminAcc.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202204131436558_updateAppUser.resx">
+      <DependentUpon>202204131436558_updateAppUser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204091332467_AddAdminAcc1.resx">
-      <DependentUpon>202204091332467_AddAdminAcc1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204120726383_AddModels.resx">
-      <DependentUpon>202204120726383_AddModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202204120830498_ChangeAdminAcc.resx">
-      <DependentUpon>202204120830498_ChangeAdminAcc.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202204131446337_updateSeedAcc.resx">
+      <DependentUpon>202204131446337_updateSeedAcc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
