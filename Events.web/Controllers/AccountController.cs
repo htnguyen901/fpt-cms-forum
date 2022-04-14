@@ -144,8 +144,8 @@ namespace Events.web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Role = new SelectList(Db.Roles, "Id", "Name");
-            ViewBag.Department = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
+            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
+            ViewBag.DepartmentId = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
             return View();
         }
 
@@ -157,16 +157,18 @@ namespace Events.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model, ApplicationUser user)
         {
-            try
-            {
+
                 if (ModelState.IsValid)
                 {
 
                     user = new ApplicationUser
                     {
+                        FullName = model.FullName,
+                        StaffId = Db.Users.Max(x => x.StaffId) + 1,
                         UserName = model.Email,
                         Email = model.Email,
-                        Role = model.Role
+                        Role = model.Role,
+                        DepartmentId = model.DepartmentId
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
@@ -186,24 +188,11 @@ namespace Events.web.Controllers
                     Db.SaveChanges();
 
                 }
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
+            
+
             // If we got this far, something failed, redisplay form
-            ViewBag.Role = new SelectList(Db.Roles, "Id", "Name");
-            ViewBag.Department = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
+            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name", user.Role);
+            ViewBag.DepartmentId = new SelectList(Db.Departments, "DepartmentId", "DepartmentName", user.DepartmentId);
             return View(model);
         }
 

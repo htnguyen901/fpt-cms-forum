@@ -11,7 +11,7 @@ namespace Events.web.Models
         {
             this.Comments = new HashSet<Comment>();
             this.Files = new HashSet<File>();
-            this.Reactions = new HashSet<Reaction>();
+            this.Likes = new HashSet<Like>();
             this.Views = new HashSet<View>();
         }
         public int IdeaId { get; set; }
@@ -24,6 +24,10 @@ namespace Events.web.Models
         public int CategoryId { get; set; }
         public int SubmissionId { get; set; }
 
+        public int? LikeCount    { get; set; }
+
+        public int? DislikeCount { get; set; }
+
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Category Categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -32,7 +36,7 @@ namespace Events.web.Models
         public virtual ICollection<File> Files { get; set; }
         public virtual Submission Submissions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Reaction> Reactions { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<View> Views { get; set; }
     }

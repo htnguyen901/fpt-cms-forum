@@ -37,6 +37,7 @@
             @Html.DisplayNameFor(model => model.UserId)
         </th>
         <th></th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -64,6 +65,10 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.ActionLink("Comments", "Index", "Comments", new { ideaid = item.IdeaId }, null) |
+
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.IdeaId }) |

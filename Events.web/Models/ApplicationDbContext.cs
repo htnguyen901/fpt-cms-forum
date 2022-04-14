@@ -25,6 +25,8 @@ namespace Events.web.Models
 
         public virtual DbSet<View> Views { get; set; }
 
+        public virtual DbSet<Like> Likes { get; set; }
+
         public ApplicationDbContext()
             : base("CMSEntities", throwIfV1Schema: false)
         {

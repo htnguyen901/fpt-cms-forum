@@ -1,83 +1,91 @@
-﻿@model Events.web.Models.Idea
+﻿@model Events.web.ViewModels.IdeaCommentViewModel
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>@Model.Idea.Title</h2>
 
 <div>
     <h4>Idea</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Categories.CategoryName)
+            @Html.DisplayNameFor(model => model.Idea.Categories.CategoryName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Categories.CategoryName)
+            @Html.DisplayFor(model => model.Idea.Categories.CategoryName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Submissions.SubmissionName)
+            @Html.DisplayNameFor(model => model.Idea.Submissions.SubmissionName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Submissions.SubmissionName)
+            @Html.DisplayFor(model => model.Idea.Submissions.SubmissionName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Idea.Title)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Idea.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Idea.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Idea.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => model.Idea.Content)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => model.Idea.Content)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateDate)
+            @Html.DisplayNameFor(model => model.Idea.CreateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreateDate)
+            @Html.DisplayFor(model => model.Idea.CreateDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LastModifiedDate)
+            @Html.DisplayNameFor(model => model.Idea.LastModifiedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LastModifiedDate)
+            @Html.DisplayFor(model => model.Idea.LastModifiedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UserId)
+            @Html.DisplayNameFor(model => model.Idea.UserId)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UserId)
+            @Html.DisplayFor(model => model.Idea.UserId)
         </dd>
 
     </dl>
 </div>
+<ul>
+    @foreach (var comment in Model.Comments)
+            {
+                <li>
+                    @comment.Content
+                </li>
+            }
+</ul>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdeaId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Idea.IdeaId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

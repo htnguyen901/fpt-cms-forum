@@ -91,6 +91,8 @@ namespace Events.web.Models
 
         public string Role { get; set; }
 
+        public IdentityRole Roles { get; set; }
+
         public int DepartmentId { get; set; }
     }   
 

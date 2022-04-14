@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
 
-namespace LearningSystem.web.Controllers
+namespace Events.web.Controllers
 {
     public class CategoryController : Controller
     {

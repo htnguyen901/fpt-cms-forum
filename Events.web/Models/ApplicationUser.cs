@@ -24,6 +24,8 @@ namespace Events.web.Models
         public int DepartmentId { get; set; }
         public virtual Department Departments { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
