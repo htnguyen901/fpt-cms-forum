@@ -21,10 +21,11 @@ namespace Events.web.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
-        public ActionResult Index(int ideaid)
+
+        public ActionResult Index(int id)
         {
             var repo = new CommentRepository();
-            var model = repo.GetIdeaCommentViewModel(ideaid);
+            var model = repo.GetIdeaCommentViewModel(id);
             return View(model);
         }
 
@@ -56,11 +57,21 @@ namespace Events.web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CommentId,Content,CreateDate,LastModifiedDate,UserId,IdeaId")] Comment comment)
         {
+
             if (ModelState.IsValid)
             {
+                comment.CreateDate = DateTime.Now;
+                comment.LastModifiedDate = DateTime.Now;
+                comment.UserId = "ce2c2928-d805-4d4b-8996-399f11d839f3";
+                comment.IdeaId = 1;
+
+                var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                var currentU = db.Users.Find(currentUser.Id);
+                comment.ApplicationUser = currentU;
+
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Comments", new {id=1});
             }
 
             return View(comment);
@@ -126,27 +137,56 @@ namespace Events.web.Controllers
         [HttpPost]
         public ActionResult Comment(IdeaCommentViewModel ideaCommentViewModel)
         {
-            this.CreateComment(ideaCommentViewModel);
-            return RedirectToAction("Index", "Comments", new {ideaCommentViewModel.Idea.IdeaId});
+
+
+            //var repo = new PostRepository(db);
+            //var idea = repo.GetIdea(ideaCommentViewModel.Idea.IdeaId);
+            var ideaid = ideaCommentViewModel.Idea.IdeaId;
+            var currentIdea = db.Ideas.Find(ideaid);
+
+            //var comment = ideaCommentViewModel.Comments;
+
+            var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentU = db.Users.Find(currentUser.Id);
+            //comment.ApplicationUser = currentU;
+
+            //_comment.Ideas = idea;
+
+            var _comment = new Comment
+            {
+                Ideas = currentIdea,
+                Content = ideaCommentViewModel.Comments.Content,
+                UserId = currentU.Id,
+                IdeaId = ideaCommentViewModel.Idea.IdeaId,
+                CreateDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                ApplicationUser = currentU
+            };
+
+
+            db.Comments.Add(_comment);
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Comments", new { id=ideaCommentViewModel.Idea.IdeaId});
         }
 
-        public ActionResult CreateComment(IdeaCommentViewModel ideaCommentVM)
-        {
-            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+        //public ActionResult CreateComment(IdeaCommentViewModel ideaCommentVM)
+        //{
+        //    ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
-            var repo = new PostRepository(db);
-            var idea = repo.GetById(ideaCommentVM.Idea.IdeaId);
-            var comment = ideaCommentVM.Comments;
+        //    var repo = new PostRepository(db);
+        //    var idea = repo.GetById(ideaCommentVM.Idea.IdeaId);
+        //    var comment = ideaCommentVM.Comments;
 
-            comment.UserId = user.Id;
-            comment.Ideas = idea;
-            comment.CreateDate = DateTime.Now;
+        //    comment.UserId = user.Id;
+        //    comment.Ideas = idea;
+        //    comment.CreateDate = DateTime.Now;
 
-            var result = repo.Add(comment);
+        //    //var result = repo.Add(comment);
 
-            return RedirectToAction("Index", "Comments", new { ideaid = ideaCommentVM.Idea.IdeaId });
+        //    return repo.Add(comment);
             
-        }
+        //}
 
         protected override void Dispose(bool disposing)
         {

@@ -1,4 +1,8 @@
-﻿@model Events.web.ViewModels.IdeaCommentViewModel
+﻿@using Microsoft.AspNet.Identity;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Events.web.ViewModels.IdeaCommentViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -58,18 +62,18 @@
 
                                 @*//This is reply to a Comment (Nested Comments)*@
                                 @*@if (!User.Identity.IsAuthenticated)
-                            {
-                                <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
-                            }
-                        else
-                            {
-                                <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
-                            }*@
+                                        {
+                                            <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
+                                        }
+                                    else
+                                        {
+                                            <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
+                                        }*@
                             </div>
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <div class="collapse" id="@($"replyComment{comment.CommentId}")">
-                                    <form asp-controller="Idea" asp-action="Comment">
+                                    <form asp-controller="Comments" asp-action="Comment">
                                         <input asp-for="Idea.IdeaId" readonly hidden />
                                         <div class="form-group">
                                             <label for="comment">Write a Reply</label>
@@ -86,8 +90,9 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div>
-                        <form asp-controller="Idea" asp-action="Comment">
-                            <input asp-for="Idea.IdeaId" readonly hidden />
+                        <form asp-controller="Comments" asp-action="Comment">
+                            <input asp-for="Idea.IdeaId" value="@Model.Idea.IdeaId" class="form-control" />
+                            <input asp-for="Comments.UserId" value="@User.Identity.GetUserId()" class="form-control" />
                             <div class="form-group">
                                 <label for="comment">Comment</label>
                                 <textarea asp-for="Comments.Content" class="form-control" rows="3"></textarea>
@@ -98,7 +103,7 @@
                 }
                 else
                 {
-                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comments/ideaid=@Model.Idea.IdeaId">Login to Reply</a>
+                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comments?ideaid=@Model.Idea.IdeaId">Login to Reply</a>
 
                 }
             </div>
@@ -115,4 +120,4 @@
             var $this = $(this)
         });
     </script>
-    }
+}

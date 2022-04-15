@@ -16,17 +16,17 @@ namespace Events.web.Repository
     public class CommentRepository
     {
         ApplicationDbContext db = new ApplicationDbContext();
-        public IdeaCommentViewModel GetIdeaCommentViewModel(int ideaid)
+        public IdeaCommentViewModel GetIdeaCommentViewModel(int id)
         {
  
-            if (ideaid == 0)
+            if (id == 0)
             {
                 return null;
             }
 
             var repo = new PostRepository(db);
-            var idea = repo.GetIdea(ideaid);
-            //var comment = repo.GetComment(ideaid);
+            var idea = repo.GetIdea(id);
+            var comment = repo.GetComment(id);
 
             if (idea is null)
             {
@@ -36,7 +36,7 @@ namespace Events.web.Repository
             return new IdeaCommentViewModel
             {
                 Idea = idea,
-                //Comments = comment
+                Comments = comment
             };
 
         }

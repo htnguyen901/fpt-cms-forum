@@ -28,12 +28,12 @@ namespace Events.web.Repository
         {
             return First(e => e.IdeaId == id);
         }
-        public Idea GetIdea(int IdeaId)
+        public Idea GetIdea(int id)
         {
             return context.Ideas
                 .Include(i => i.ApplicationUser)
                 .Include(i => i.Comments.Select(c => c.ApplicationUser))
-                .FirstOrDefault(i => i.IdeaId == IdeaId);
+                .FirstOrDefault(i => i.IdeaId == id);
         }
 
         public Comment GetComment(int commentId)
