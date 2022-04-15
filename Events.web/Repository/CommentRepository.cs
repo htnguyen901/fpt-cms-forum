@@ -15,47 +15,30 @@ namespace Events.web.Repository
 {
     public class CommentRepository
     {
-        public IdeaCommentViewModel GetIdeaCommentDisplay(int ideaid)
+        ApplicationDbContext db = new ApplicationDbContext();
+        public IdeaCommentViewModel GetIdeaCommentViewModel(int ideaid)
         {
-            if (ideaid != null)
+ 
+            if (ideaid == 0)
             {
-                using (var db = new ApplicationDbContext())
-                {
-                    var comment = db.Comments.Where(c => c.IdeaId == ideaid).FirstOrDefault();
-                    var idea = db.Ideas.Where(c => c.IdeaId == ideaid).FirstOrDefault();
-                    if (comment != null)
-                    {
-                        var author = db.Users.Where(u => u.Id == idea.UserId).FirstOrDefault();
-                        var user = db.Users.Where(u => u.Id == comment.UserId).FirstOrDefault();
-                        var ideaCommentListVM = new IdeaCommentViewModel()
-                        {
-                            userId = comment.UserId,
-                            IdeaId = comment.IdeaId,
-                            Title = idea.Title,
-                            Content = idea.Content,
-                            CategoryName = idea.Categories.CategoryName,
-                            FullName = author.FullName
-                        };
-
-                        List<CommentDisplayViewModel> commentList = db.Comments.AsNoTracking()
-                            .Where(x => x.IdeaId == ideaid)
-                            //.OrderBy(x => x.CreateDate)
-                            .Select(x =>
-                           new CommentDisplayViewModel
-                           {
-                               UserId = x.UserId,
-                               IdeaId = x.IdeaId,
-                               CommentId = x.CommentId,
-                               CreateDate = x.CreateDate,
-                               Content = x.Content,
-                               FullName = user.FullName
-                           }).ToList();
-                        ideaCommentListVM.Comments = commentList;
-                        return ideaCommentListVM;
-                    }
-                }
+                return null;
             }
-            return null;
+
+            var repo = new PostRepository(db);
+            var idea = repo.GetIdea(ideaid);
+            //var comment = repo.GetComment(ideaid);
+
+            if (idea is null)
+            {
+                return null;
+            }
+
+            return new IdeaCommentViewModel
+            {
+                Idea = idea,
+                //Comments = comment
+            };
+
         }
     }
 }

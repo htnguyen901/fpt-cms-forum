@@ -25,105 +25,83 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Idea.Categories.CategoryName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.EditorFor(model => model.Idea.Categories.CategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Idea.Title, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.EditorFor(model => model.Idea.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Content, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Idea.Content, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.EditorFor(model => model.Idea.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-offset-1 col-md-11">
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Comments[0].FullName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Comments[0].CreateDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Comments[0].Content)
-                        </th>
-                    </tr>
-                    @if (Model.Comments == null && Model.Comments.Count == 0)
+                <h3 class="mb-5"> @Model.Idea.Comments.Count() Comments</h3>
+                <ul class="comment-list comment-top" list="@Model.Idea.Comments" count="0">
+                    @foreach (var comment in Model.Idea.Comments)
                     {
-                        <h2> No Comment for this Idea Yet</h2>
-                    }
-                    else if (Model.Comments != null && Model.Comments.Count != 0)
-                    {
-                        for (var i = 0; i < Model.Comments.Count(); i++)
-                        {
-                            <tr>
-                                @Html.HiddenFor(x => Model.Comments[i].IdeaId)
-                                <td>
-                                    @Html.DisplayFor(x => Model.Comments[i].FullName, new { @class = "form-control", @readonly = "readonly" })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(x => Model.Comments[i].CreateDate, new { @class = "form-control", @readonly = "readonly" })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(x => Model.Comments[i].Content, new { @class = "form-control", @readonly = "readonly" })
-                                </td>
-                            </tr>
-                        }
-                    }
-                    @*<tr>
-                            <td>
-                                @Html.ActionLink("Add", "Edit", new { customerid = Model.CustomerID, orderid = Model.OrderID }, htmlAttributes: new { @class = "btn btn-success" })
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>*@
-                </table>
-            </div>
-        </div>
-    </div>
+                        <li class="comment" style="margin-top: 30px;">
+                            <div class="comment-body">
+                                <h4 class="commenter-name"> @comment.ApplicationUser.FullName</h4>
+                                <div class="comment-date"> @comment.CreateDate.ToString("MMM d, yyyy hh:mm tt")</div>
+                                <p class="comment-message"> @comment.Content</p>
 
-
-    //Commenting Form
-    <div class="form-horizontal">
-        <h4>Your Replies</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="page-header">
-                        <h1><small class="pull-right">{{comments.length}} comments</small> Comments </h1>
-                    </div>
-                    <div class="comments-list">
-                        <div class="media" v-for="com in comments">
-                            <div class="media-body">
-                                <h4 class="media-heading user_name">{{com.Name}}</h4>
-                                {{com.Body}}
+                                @*//This is reply to a Comment (Nested Comments)*@
+                                @*@if (!User.Identity.IsAuthenticated)
+                            {
+                                <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
+                            }
+                        else
+                            {
+                                <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
+                            }*@
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="collapse" id="@($"replyComment{comment.CommentId}")">
+                                    <form asp-controller="Idea" asp-action="Comment">
+                                        <input asp-for="Idea.IdeaId" readonly hidden />
+                                        <div class="form-group">
+                                            <label for="comment">Write a Reply</label>
+                                            <textarea asp-for="Comments.Content" class="form-control" rows="3"></textarea>
+                                            <button type="submit" class="btn btn-outline-primary post-btn">Post Comment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                        </li>
+                    }
+                </ul>
 
-        <div class="container">
-            <br />
-            <p>Your Comment</p>
-            <form onsubmit="return false;">
-                
-                <textarea rows="3" placeholder="Your Comment" id="Content" v-model="comment.Content" class="form-control"></textarea>
-                <button class="btn btn-success" v-on:click="submit_comment()">save</button>
-            </form>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div>
+                        <form asp-controller="Idea" asp-action="Comment">
+                            <input asp-for="Idea.IdeaId" readonly hidden />
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <textarea asp-for="Comments.Content" class="form-control" rows="3"></textarea>
+                                <button type="submit" class="btn btn-outline-primary post-btn">Post Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comments/ideaid=@Model.Idea.IdeaId">Login to Reply</a>
+
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -131,52 +109,10 @@
 
     @Html.ActionLink("Back to List", "Index")
 </p>
-<script>
-    var pusher = new Pusher('XXX_APP_KEY', {
-        cluster: 'XXX_APP_CLUSTER'
-    });
-    var my_channel = pusher.subscribe('asp_channel');
-    var app = new Vue({
-        el: '#app',
-        data: {
-            comments: [],
-            comment: {
-                userId: '',
-                Content: '',
-                IdeaId: @Model.IdeaId
-            }
-        },
-        created: function() {
-            this.get_comments();
-            this.listen();
-        },
-        methods: {
-            get_comments: function() {
-                axios.get('@Url.Action("Comments", "Home", new { id = @Model.IdeaId }, protocol: Request.Url.Scheme)')
-                    .then((response) => {
-
-                        this.comments = response.data;
-
-                    });
-
-            },
-            listen: function() {
-                my_channel.bind("asp_event", (data) => {
-                    if (data.IdeaId == this.comment.IdeaId) {
-                        this.comments.push(data);
-                    }
-
-                })
-            },
-            submit_comment: function() {
-                axios.post('@Url.Action("Comment", "Comments", new {}, protocol: Request.Url.Scheme)', this.comment)
-                    .then((response) => {
-                        this.comment.userId = '';
-                        this.comment.Content = '';
-                        alert("Comment Submitted");
-
-                    });
-            }
-        }
-    });
-</script>
+@section Scripts{
+    <script>
+        $('[data-toggle=collapse]').on('click', function () {
+            var $this = $(this)
+        });
+    </script>
+    }

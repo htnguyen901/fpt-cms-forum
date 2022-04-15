@@ -15,6 +15,7 @@ namespace Events.web.Hubs
 {
     public class PostHub : Hub
     {
+        ApplicationDbContext db = new ApplicationDbContext();
         public Task Like(string postId)
         {
             var likePost = SaveLike(postId);
@@ -26,7 +27,7 @@ namespace Events.web.Hubs
 
             var postId = int.Parse(id);
             var baseContext = Context.Request.GetHttpContext();
-            var postRepository = new PostRepository();
+            var postRepository = new PostRepository(db);
             var item = postRepository.GetById(postId);
             var liked = new Like
             {

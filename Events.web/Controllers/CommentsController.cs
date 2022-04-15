@@ -24,7 +24,7 @@ namespace Events.web.Controllers
         public ActionResult Index(int ideaid)
         {
             var repo = new CommentRepository();
-            var model = repo.GetIdeaCommentDisplay(ideaid);
+            var model = repo.GetIdeaCommentViewModel(ideaid);
             return View(model);
         }
 
@@ -124,36 +124,28 @@ namespace Events.web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddComment(CommentDisplayViewModel commentVM, int ideaid)
+        public ActionResult Comment(IdeaCommentViewModel ideaCommentViewModel)
         {
-            //bool result = false;  
-            Comment commentEntity = null;
-            string userId = (string)Session["UserID"];
+            this.CreateComment(ideaCommentViewModel);
+            return RedirectToAction("Index", "Comments", new {ideaCommentViewModel.Idea.IdeaId});
+        }
 
-            var user = db.Users.FirstOrDefault(u => u.Id == userId);
-            var idea = db.Ideas.FirstOrDefault(p => p.IdeaId == ideaid);
+        public ActionResult CreateComment(IdeaCommentViewModel ideaCommentVM)
+        {
+            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
-            if (commentVM != null)
-            {
+            var repo = new PostRepository(db);
+            var idea = repo.GetById(ideaCommentVM.Idea.IdeaId);
+            var comment = ideaCommentVM.Comments;
 
-                commentEntity = new Comment
-                {
-                    UserId = user.Id,
-                    Content = commentVM.Content
-                };
+            comment.UserId = user.Id;
+            comment.Ideas = idea;
+            comment.CreateDate = DateTime.Now;
 
+            var result = repo.Add(comment);
 
-                if (user != null && idea != null)
-                {
-                    idea.Comments.Add(commentEntity);
-                    user.Comments.Add(commentEntity);
-
-                    db.SaveChanges();
-                    //result = true;  
-                }
-            }
-
-            return RedirectToAction("Index", "Comments", new { id = ideaid });
+            return RedirectToAction("Index", "Comments", new { ideaid = ideaCommentVM.Idea.IdeaId });
+            
         }
 
         protected override void Dispose(bool disposing)

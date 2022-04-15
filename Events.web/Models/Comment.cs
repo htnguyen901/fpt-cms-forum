@@ -7,10 +7,6 @@ namespace Events.web.Models
 {
     public class Comment
     {
-        public Comment()
-        {
-            this.Ideas = new HashSet<Idea>();
-        }
         public int CommentId { get; set; }
         public string Content { get; set; }
         public DateTime CreateDate { get; set; }
@@ -19,7 +15,7 @@ namespace Events.web.Models
         public int IdeaId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ICollection<Idea> Ideas { get; set; }
+        public virtual Idea Ideas { get; set; }
 
 
     }

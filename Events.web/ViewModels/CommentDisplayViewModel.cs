@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Events.web.Models;
 
 namespace Events.web.ViewModels
 {
@@ -21,5 +22,7 @@ namespace Events.web.ViewModels
         [Display(Name = "User Comment")]
 
         public string Content { get; set; }
+
+        public Idea Idea { get; set; }
     }
 }

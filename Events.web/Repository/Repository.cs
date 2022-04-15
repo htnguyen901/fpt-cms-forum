@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Events.web.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -15,10 +16,10 @@ namespace Events.web.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected DbContext dbContext;
+        protected ApplicationDbContext dbContext;
         protected IObjectSet<TEntity> _objectSet;
 
-        public Repository(DbContext context)
+        public Repository(ApplicationDbContext context)
         {
             dbContext = context;
             _objectSet =  ((IObjectContextAdapter)context).ObjectContext.CreateObjectSet<TEntity>();

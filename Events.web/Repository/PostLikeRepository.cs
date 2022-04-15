@@ -10,7 +10,7 @@ namespace Events.web.Repository
     //Like
     public class PostLikeRepository : Repository<Like>
     {
-        public PostLikeRepository(DbContext context) : base(context)
+        public PostLikeRepository(ApplicationDbContext context) : base(context)
         {
         }
 
