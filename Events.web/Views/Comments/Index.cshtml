@@ -1,7 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
 
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
 @model Events.web.ViewModels.IdeaCommentViewModel
 
 @{
@@ -42,10 +40,19 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Idea.Content, new { @class = "control-label col-md-2" })
+            
+            <div class="col-md-10">
+                <h2>@Html.Raw(Model.Idea.ApplicationUser.FullName)</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-10 mx-auto">
+            @Html.Raw(Model.Idea.Content)
+
+            @*@Html.LabelFor(model => model.Idea.Content, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Idea.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-            </div>
+            </div>*@
         </div>
 
         <div class="row">
@@ -62,13 +69,13 @@
 
                                 @*//This is reply to a Comment (Nested Comments)*@
                                 @*@if (!User.Identity.IsAuthenticated)
-                                        {
-                                            <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
-                                        }
-                                    else
-                                        {
-                                            <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
-                                        }*@
+                                    {
+                                        <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
+                                    }
+                                else
+                                    {
+                                        <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
+                                    }*@
                             </div>
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -89,7 +96,31 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <div>
+                    using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
+                    {
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="2" align="center">Comments</th>
+                            </tr>
+                            <tr>
+                                @Html.HiddenFor(model => model.Idea.IdeaId)
+                            </tr>
+                            <tr>
+                                <td>Content: </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Comments.Content)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Post Comment" /></td>
+                            </tr>
+                        </table>
+                    }
+
+
+                    // OLD Code asp TagHelper doesn't work for MVC 5
+                    @*<div>
                         <form asp-controller="Comments" asp-action="Comment">
                             <input asp-for="Idea.IdeaId" value="@Model.Idea.IdeaId" class="form-control" />
                             <input asp-for="Comments.UserId" value="@User.Identity.GetUserId()" class="form-control" />
@@ -99,7 +130,7 @@
                                 <button type="submit" class="btn btn-outline-primary post-btn">Post Comment</button>
                             </div>
                         </form>
-                    </div>
+                    </div>*@
                 }
                 else
                 {
