@@ -19,12 +19,14 @@ namespace Events.web.Controllers
         public string LikeThis(int id)
         {
             Idea idea = db.Ideas.FirstOrDefault(x => x.IdeaId == id);
-            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentU = db.Users.Find(currentUser);
 
             idea.LikeCount++;
             Like like = new Like();
             like.IdeaId = id;
-            like.UserId = user.Id;
+            like.ApplicationUser = currentU;
+            like.UserId = currentU.Id;
             like.IsLike = true;
             db.Likes.Add(like);
             db.SaveChanges();
@@ -35,8 +37,10 @@ namespace Events.web.Controllers
         public string UnlikeThis(int id)
         {
             Idea idea = db.Ideas.FirstOrDefault(x => x.IdeaId == id);
-            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            Like like = db.Likes.FirstOrDefault(x => x.IdeaId == id && x.UserId == user.Id);
+            var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentU = db.Users.Find(currentUser);
+
+            Like like = db.Likes.FirstOrDefault(x => x.IdeaId == id && x.UserId == currentU.Id);
             idea.LikeCount--;
             db.Likes.Remove(like);
             db.SaveChanges();

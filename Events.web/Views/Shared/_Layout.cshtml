@@ -34,7 +34,7 @@
                     }
                     @if (User.IsInRole("Staff"))
                     {
-                        <li>@Html.ActionLink("Submission", "Index", "Submisisons")</li>
+                        <li>@Html.ActionLink("Submission", "Index", "ViewSubmissions")</li>
                         <li>@Html.ActionLink("Idea", "Index", "Ideas")</li>
                     }
                     @if (User.IsInRole("Administrator") || (User.IsInRole("QAManager")) || (User.IsInRole("")))

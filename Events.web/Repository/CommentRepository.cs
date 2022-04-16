@@ -27,6 +27,7 @@ namespace Events.web.Repository
             var repo = new PostRepository(db);
             var idea = repo.GetIdea(id);
             var comment = repo.GetComment(id);
+            var like = repo.GetLike(id);
 
             if (idea is null)
             {
@@ -36,7 +37,8 @@ namespace Events.web.Repository
             return new IdeaCommentViewModel
             {
                 Idea = idea,
-                Comments = comment
+                Comments = comment,
+                Like = like
             };
 
         }

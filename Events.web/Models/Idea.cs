@@ -24,9 +24,9 @@ namespace Events.web.Models
         public int CategoryId { get; set; }
         public int SubmissionId { get; set; }
 
-        public int? LikeCount    { get; set; }
+        public int LikeCount    { get; set; }
 
-        public int? DislikeCount { get; set; }
+        public int DislikeCount { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Category Categories { get; set; }

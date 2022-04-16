@@ -56,7 +56,8 @@ namespace Events.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                var currentU = db.Users.Find(currentUser.Id);
                 idea = new Idea()
                 {
                     IdeaId = idea.IdeaId,
@@ -65,9 +66,10 @@ namespace Events.web.Controllers
                     CategoryId = idea.CategoryId,
                     Description = idea.Description,
                     Content = idea.Content,
-                    UserId = user.Id,
+                    UserId = currentU.Id,
                     CreateDate = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
+                    ApplicationUser = currentU
                 };
                 db.Ideas.Add(idea);
                 db.SaveChanges();

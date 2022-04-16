@@ -54,6 +54,26 @@
                 @Html.EditorFor(model => model.Idea.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>*@
         </div>
+        <div>
+            <li>
+                @{
+                    string userid = Convert.ToString(Session["ID"]);
+
+                    if (!User.Identity.IsAuthenticated)
+                    {
+                        <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Testing</span>
+                    }
+                    else if (Model.Idea.Likes.Any(u => u.UserId == userid && u.IdeaId == Model.Idea.IdeaId) || Ajax.ViewBag.IsLike == true)
+                    {
+                        <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
+                    }
+                    else
+                    {
+                        <a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span></a>
+                    }
+            }
+        </li>
+        </div>
 
         <div class="row">
             <div class="col-md-offset-1 col-md-11">
@@ -145,10 +165,34 @@
 
     @Html.ActionLink("Back to List", "Index")
 </p>
-@section Scripts{
+
     <script>
-        $('[data-toggle=collapse]').on('click', function () {
-            var $this = $(this)
-        });
+
+            //LIKE
+            $(document).on("click", "a.like", function () {
+                var id = $(this).data("id");
+                var link = "/Comments/LikeThis/" + id;
+                var a = $(this);
+                $.ajax({
+                    type: "GET",
+                    url: link,
+                    success: function (result) {
+                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Unlike").removeClass("like").addClass("unlike");
+                    }
+                });
+            });
+            //UNLIKE
+            $(document).on("click", "a.unlike",function () {
+                var id = $(this).data("id");
+                var link = "/Comments/UnlikeThis/" + id;
+                var a = $(this);
+                $.ajax({
+                    type: "GET",
+                    url: link,
+                    success: function (result) {
+                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Like").removeClass("unlike").addClass("like");
+                    }
+                });
+            });
+
     </script>
-}

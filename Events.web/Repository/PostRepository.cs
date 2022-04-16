@@ -44,6 +44,14 @@ namespace Events.web.Repository
                 .FirstOrDefault(c => c.CommentId == commentId);
         }
 
+        public Like GetLike(int likeId)
+        {
+            return context.Likes
+                .Include(c => c.ApplicationUser)
+                .Include(c => c.Idea)
+                .FirstOrDefault(c => c.LikeId == likeId);
+        }
+
 
         public Comment Add(Comment comment)
         {
