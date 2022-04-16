@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.FinalClosureDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.SubmissionId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.SubmissionId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.SubmissionId })
+
+                @Html.ActionLink("View Ideas", "ViewIdea", new { id = item.SubmissionId }) |
+
             </td>
         </tr>
     }

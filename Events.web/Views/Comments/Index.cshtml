@@ -61,7 +61,7 @@
 
                     if (!User.Identity.IsAuthenticated)
                     {
-                        <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Testing</span>
+                        <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
                     }
                     else if (Model.Idea.Likes.Any(u => u.UserId == userid && u.IdeaId == Model.Idea.IdeaId) || Ajax.ViewBag.IsLike == true)
                     {

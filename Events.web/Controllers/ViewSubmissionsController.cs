@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
+using Events.web.ViewModels;
 
 namespace Events.web.Controllers
 {
@@ -18,6 +19,31 @@ namespace Events.web.Controllers
         public ActionResult Index()
         {
             return View(db.Submissions.ToList());
+        }
+
+        public ActionResult ViewIdea(int id)
+        {
+
+            var submission = db.Submissions
+                .Include(i => i.Ideas)
+                .FirstOrDefault(i => i.SubmissionId == id);
+
+            var idea = db.Ideas
+                .Include(i => i.Categories)
+                .FirstOrDefault(i => i.SubmissionId == id);
+
+            if (idea is null)
+            {
+                return null;
+            }
+
+            var model =  new SubmissionIdeaViewModel
+            {
+                Submission = submission,
+                Idea = idea
+            };
+
+            return View(model);
         }
 
         // GET: Submissions/Details/5

@@ -616,6 +616,7 @@
     <Compile Include="ViewModels\CommentDisplayViewModel.cs" />
     <Compile Include="ViewModels\IdeaCommentViewModel.cs" />
     <Compile Include="ViewModels\PostLikeViewModel.cs" />
+    <Compile Include="ViewModels\SubmissionIdeaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -731,7 +732,6 @@
     <Content Include="Views\TrainingStaff\Delete.cshtml" />
     <Content Include="Views\Ideas\Create.cshtml" />
     <Content Include="Views\Ideas\Delete.cshtml" />
-    <Content Include="Views\Ideas\Details.cshtml" />
     <Content Include="Views\Ideas\Edit.cshtml" />
     <Content Include="Views\Ideas\Index.cshtml" />
     <Content Include="Views\ViewSubmissions\Index.cshtml" />
@@ -741,6 +741,7 @@
     <Content Include="Views\Comments\Details.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
     <Content Include="Views\Comments\Index.cshtml" />
+    <Content Include="Views\ViewSubmissions\ViewIdea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
