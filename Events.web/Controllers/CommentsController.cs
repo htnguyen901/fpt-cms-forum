@@ -24,10 +24,30 @@ namespace Events.web.Controllers
 
         public ActionResult Index(int id)
         {
+            var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentU = db.Users.Find(currentUser.Id);
+
             var repo = new CommentRepository();
             var model = repo.GetIdeaCommentViewModel(id);
+
+            var view = new View
+            {
+                UserId = currentU.Id,
+                IdeaId = id,
+                ApplicationUser = currentU,
+                Ideas = db.Ideas.Find(id),
+                LastVisitedDate = DateTime.Now
+            };
+            var userViewed = db.Views.Where(v => v.UserId == currentU.Id && v.IdeaId == id).FirstOrDefault();
+
+            if (userViewed == null)
+            {
+                db.Views.Add(view);
+                db.SaveChanges();
+            }
             return View(model);
         }
+
 
         // GET: Comments/Details/5
         public ActionResult Details(int? id)

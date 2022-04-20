@@ -18,10 +18,21 @@ namespace Events.web.Controllers
 
 
         // GET: Ideas
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions);
-            return View(ideas.ToList());
+            
+            if (id == null)
+            {
+                var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions);
+                return View(ideas.ToList());
+            }
+            else
+            {
+                var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions)
+                    .Where(i => i.Submissions.SubmissionId == id);
+                return View(ideas.ToList());
+            }
+
         }
 
         // GET: Ideas/Details/5

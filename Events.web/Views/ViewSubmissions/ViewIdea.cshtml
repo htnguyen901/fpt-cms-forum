@@ -39,16 +39,6 @@
                         }
                         <div class="idea-date"> @idea.CreateDate.ToString("MMM d, yyyy hh:mm tt")</div>
                         <p class="idea-message"> @idea.Content</p>
-
-                        @*//This is reply to a Comment (Nested Comments)*@
-                        @*@if (!User.Identity.IsAuthenticated)
-            {
-                <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
-            }
-        else
-            {
-                <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
-            }*@
                     </div>
                 </li>
             }

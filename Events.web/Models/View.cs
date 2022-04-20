@@ -9,6 +9,7 @@ namespace Events.web.Models
     public class View
     {
         [Key]
+        public int viewId { get; set; }
         public string UserId { get; set; }
         
         public int IdeaId { get; set; }

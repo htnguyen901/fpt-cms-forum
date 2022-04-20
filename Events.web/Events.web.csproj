@@ -597,6 +597,10 @@
     <Compile Include="Migrations\202204201319327_updateisAnontoTrue.designer.cs">
       <DependentUpon>202204201319327_updateisAnontoTrue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204201508418_updateViewModel.cs" />
+    <Compile Include="Migrations\202204201508418_updateViewModel.designer.cs">
+      <DependentUpon>202204201508418_updateViewModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\DbMigrationsConfig.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -769,6 +773,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204201319327_updateisAnontoTrue.resx">
       <DependentUpon>202204201319327_updateisAnontoTrue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204201508418_updateViewModel.resx">
+      <DependentUpon>202204201508418_updateViewModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

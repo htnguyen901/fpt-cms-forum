@@ -58,21 +58,19 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             @Html.Raw(Model.Idea.Content)
 
-            @*@Html.LabelFor(model => model.Idea.Content, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Idea.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-            </div>*@
         </div>
         <div>
-            <li>
+            
                 @{
-                    string userid = Convert.ToString(Session["ID"]);
+                    string userid = User.Identity.GetUserId();
 
                     if (!User.Identity.IsAuthenticated)
                     {
                         <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
                     }
-                    else if (Model.Idea.Likes.Any(u => u.UserId == userid && u.IdeaId == Model.Idea.IdeaId) || Ajax.ViewBag.IsLike == true)
+                    else if ((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId == Model.Idea.IdeaId).Count() > 0 ) || Ajax.ViewBag.IsLike == true)
+
+                    //else if (Model.Idea.Likes.Any(u => u.UserId == userid && u.IdeaId == Model.Idea.IdeaId) || Ajax.ViewBag.IsLike == true)
                     {
                         <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
                     }
@@ -81,7 +79,7 @@
                         <a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span></a>
                     }
             }
-        </li>
+            
         </div>
 
         <div class="row">
@@ -111,48 +109,34 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
-                    {
-            <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <th colspan="2" align="center">Comments</th>
-                </tr>
-                <tr>
-                    <th>
-                        Post Anonymously?  @Html.CheckBoxFor(model => model.Comments.isAnon)
+                            using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
+                            {
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th colspan="2" align="center">Comments</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                Post Anonymously?  @Html.CheckBoxFor(model => model.Comments.isAnon)
 
-                    </th>
-                </tr>
-                <tr>
-                    @Html.HiddenFor(model => model.Idea.IdeaId)
-                </tr>
-                <tr>
-                    <td>Content: </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.Comments.Content, htmlAttributes: new { @Value = "" })
-                    </td>
-                </tr>
+                            </th>
+                        </tr>
+                        <tr>
+                            @Html.HiddenFor(model => model.Idea.IdeaId)
+                        </tr>
+                        <tr>
+                            <td>Content: </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Comments.Content, htmlAttributes: new { @Value = "" })
+                            </td>
+                        </tr>
 
-                <tr>
-                    <td></td>
-                    <td><input type="submit" value="Post Comment" /></td>
-                </tr>
-            </table>
+                        <tr>
+                            <td></td>
+                            <td><input type="submit" value="Post Comment" /></td>
+                        </tr>
+                    </table>
                     }
-
-
-                    // OLD Code asp TagHelper doesn't work for MVC 5
-                    @*<div>
-                        <form asp-controller="Comments" asp-action="Comment">
-                            <input asp-for="Idea.IdeaId" value="@Model.Idea.IdeaId" class="form-control" />
-                            <input asp-for="Comments.UserId" value="@User.Identity.GetUserId()" class="form-control" />
-                            <div class="form-group">
-                                <label for="comment">Comment</label>
-                                <textarea asp-for="Comments.Content" class="form-control" rows="3"></textarea>
-                                <button type="submit" class="btn btn-outline-primary post-btn">Post Comment</button>
-                            </div>
-                        </form>
-                    </div>*@
                 }
                 else
                 {
@@ -165,7 +149,7 @@
 </div>
 <p>
 
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", "Ideas", new {id=Model.Idea.SubmissionId}, null)
 </p>
 
     <script>

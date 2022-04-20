@@ -34,48 +34,60 @@
             @Html.DisplayNameFor(model => model.LastModifiedDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UserId)
+            @Html.DisplayNameFor(model => model.ApplicationUser.FullName)
         </th>
-        <th></th>
+        <th>
+            No. of Comments
+        </th>
+        <th>
+            No. of Views
+        </th>
+        <th>
+            No. of Likes
+        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categories.CategoryName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Submissions.SubmissionName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastModifiedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>
-        <td>
-            @Html.ActionLink("Comments", "Index", "Comments", new { id = item.IdeaId }, null) |
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Categories.CategoryName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Submissions.SubmissionName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Content)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastModifiedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+    </td>
+    <td>
+        @item.Comments.Count()
+    </td>
+    <td>
+        @item.Views.Count()
+    </td>
+    <td>
+        @item.LikeCount
+    </td>
+    <td>
+        @Html.ActionLink("View Comments", "Index", "Comments", new { id = item.IdeaId }, null)
 
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdeaId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdeaId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdeaId })
-        </td>
-    </tr>
+    </td>
+</tr>
 }
 
 </table>
