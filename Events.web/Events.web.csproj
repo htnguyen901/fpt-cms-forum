@@ -573,8 +573,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\MyHub1.cs" />
-    <Compile Include="Hubs\PostHub.cs" />
     <Compile Include="Migrations\202204131412354_initial.cs" />
     <Compile Include="Migrations\202204131412354_initial.designer.cs">
       <DependentUpon>202204131412354_initial.cs</DependentUpon>
@@ -590,6 +588,14 @@
     <Compile Include="Migrations\202204140248458_updateIdeaLike.cs" />
     <Compile Include="Migrations\202204140248458_updateIdeaLike.designer.cs">
       <DependentUpon>202204140248458_updateIdeaLike.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204201206280_updateModeltoPostAnon.cs" />
+    <Compile Include="Migrations\202204201206280_updateModeltoPostAnon.designer.cs">
+      <DependentUpon>202204201206280_updateModeltoPostAnon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204201319327_updateisAnontoTrue.cs" />
+    <Compile Include="Migrations\202204201319327_updateisAnontoTrue.designer.cs">
+      <DependentUpon>202204201319327_updateisAnontoTrue.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\DbMigrationsConfig.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -710,26 +716,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\TrainingStaff\Course.cshtml" />
-    <Content Include="Views\TrainingStaff\CourseCategory.cshtml" />
-    <Content Include="Views\TrainingStaff\CourseCategoryCreate.cshtml" />
-    <Content Include="Views\TrainingStaff\CourseCreate.cshtml" />
-    <Content Include="Areas\Admin\Views\Users\Role.cshtml" />
-    <Content Include="Areas\Admin\Views\Users\RoleCreate.cshtml" />
-    <Content Include="Views\TrainingStaff\AssignTrainerToCourse.cshtml" />
-    <Content Include="Views\TrainingStaff\Trainer.cshtml" />
-    <Content Include="Views\TrainingStaff\Edit.cshtml" />
-    <Content Include="Views\TrainingStaff\Trainee.cshtml" />
-    <Content Include="Views\Train\CourseAssigned.cshtml" />
-    <Content Include="Views\Train\Course.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
-    <Content Include="Views\TrainingStaff\AssignTraineeToCourse.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Edit.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Views\TrainingStaff\Details.cshtml" />
-    <Content Include="Views\TrainingStaff\Delete.cshtml" />
     <Content Include="Views\Ideas\Create.cshtml" />
     <Content Include="Views\Ideas\Delete.cshtml" />
     <Content Include="Views\Ideas\Edit.cshtml" />
@@ -772,6 +763,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204140248458_updateIdeaLike.resx">
       <DependentUpon>202204140248458_updateIdeaLike.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204201206280_updateModeltoPostAnon.resx">
+      <DependentUpon>202204201206280_updateModeltoPostAnon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204201319327_updateisAnontoTrue.resx">
+      <DependentUpon>202204201319327_updateisAnontoTrue.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

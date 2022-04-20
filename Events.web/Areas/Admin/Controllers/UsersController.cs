@@ -11,18 +11,22 @@ namespace Events.web.Areas.Admin.Controllers
     {
         public ActionResult Index() //Publicly get action of 'Users' to set in other files
         {
-            List<ApplicationUser> QACoor = new List<ApplicationUser>();
-            var role = Db.Roles
-                .Where(r => r.Name == "QACoordinator, QAManager")
-                .FirstOrDefault();
-            if (role != null)
-            {
-                var users = Db.Users
-                    .Where(u => u.Roles.Select(r => r.RoleId).Contains(role.Id))
-                    .ToList();
-                return View(users);
-            }
-            return View(QACoor);
+            //List<ApplicationUser> QACoor = new List<ApplicationUser>();
+            //var role = Db.Roles
+            //    .Where(r => r.Name == "QACoordinator, QAManager")
+            //    .FirstOrDefault();
+            //if (role != null)
+            //{
+            //    var users = Db.Users
+            //        .Where(u => u.Roles.Select(r => r.RoleId).Contains(role.Id))
+            //        .ToList();
+            //    return View(users);
+            //}
+            //return View(QACoor);
+
+            var user = Db.Users.Where(u => u.Role == "Staff, QACoordinator").ToList();
+
+            return View(user);
         }
 
         [HttpGet] //Send data using a query string

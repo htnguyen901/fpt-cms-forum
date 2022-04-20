@@ -18,6 +18,8 @@ namespace Events.web.Models
         public string UserId { get; set; }
         public int IdeaId { get; set; }
 
+        public bool isAnon { get; set; } = true;
+
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Idea Ideas { get; set; }
 

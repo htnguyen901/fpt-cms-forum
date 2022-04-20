@@ -26,7 +26,7 @@ namespace Events.web.Models
 
         public int LikeCount    { get; set; }
 
-        public int DislikeCount { get; set; }
+        public bool isAnon { get; set; } = true;
 
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Category Categories { get; set; }

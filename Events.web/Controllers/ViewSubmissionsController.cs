@@ -32,11 +32,6 @@ namespace Events.web.Controllers
                 .Include(i => i.Categories)
                 .FirstOrDefault(i => i.SubmissionId == id);
 
-            if (idea is null)
-            {
-                return null;
-            }
-
             var model =  new SubmissionIdeaViewModel
             {
                 Submission = submission,

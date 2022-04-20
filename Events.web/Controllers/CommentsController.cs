@@ -160,7 +160,8 @@ namespace Events.web.Controllers
                 IdeaId = ideaCommentViewModel.Idea.IdeaId,
                 CreateDate = DateTime.Now,
                 LastModifiedDate = DateTime.Now,
-                ApplicationUser = currentU
+                ApplicationUser = currentU,
+                isAnon = ideaCommentViewModel.Comments.isAnon
             };
 
 

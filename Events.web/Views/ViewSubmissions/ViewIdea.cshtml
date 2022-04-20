@@ -28,19 +28,27 @@
             {
                 <li class="idea" style="margin-top: 30px;">
                     <div class="idea-body">
-                        <h4 class="idea-poster-name"> @idea.ApplicationUser.FullName</h4>
+                        @if (idea.isAnon == true)
+                        {
+                            <h4 class="idea-poster-name"> Anonymous User</h4>
+
+                        }
+                        else
+                        {
+                            <h4 class="idea-poster-name"> @idea.ApplicationUser.FullName</h4>
+                        }
                         <div class="idea-date"> @idea.CreateDate.ToString("MMM d, yyyy hh:mm tt")</div>
                         <p class="idea-message"> @idea.Content</p>
 
                         @*//This is reply to a Comment (Nested Comments)*@
                         @*@if (!User.Identity.IsAuthenticated)
-                                {
-                                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
-                                }
-                            else
-                                {
-                                    <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
-                                }*@
+            {
+                <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comment/ideaid=@comment.IdeaId">Login to Reply</a>
+            }
+        else
+            {
+                <a aria-expanded="false" href="@($"#replyComment{comment.CommentId}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
+            }*@
                     </div>
                 </li>
             }
@@ -48,4 +56,4 @@
     </div>
 </div>
 
-@Html.ActionLink("Post New Idea", "Create", "Ideas")
+@Html.ActionLink("Post New Idea", "Create", "Ideas", new {id = Model.Submission.SubmissionId}, null)
