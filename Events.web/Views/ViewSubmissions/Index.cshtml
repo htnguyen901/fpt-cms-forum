@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Events.web.Models.Submission>
+﻿@model PagedList.IPagedList<Events.web.Models.Submission>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -11,16 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SubmissionName)
+            @Html.DisplayNameFor(model => model[0].SubmissionName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SubmissionDescription)
+            @Html.DisplayNameFor(model => model[0].SubmissionDescription)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ClosureDate)
+            @Html.DisplayNameFor(model => model[0].ClosureDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FinalClosureDate)
+            @Html.DisplayNameFor(model => model[0].FinalClosureDate)
         </th>
         <th></th>
     </tr>
@@ -49,3 +51,8 @@
     }
 
 </table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, currentFilter = ViewBag.CurrentFilter }))

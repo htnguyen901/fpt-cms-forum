@@ -7,11 +7,10 @@ using Events.web.Models;
 
 namespace Events.web.ViewModels
 {
-    public class IdeaCommentViewModel
+    public class IdeaSortViewModel
     {
         public virtual Idea Idea { get; set; }
-        public virtual Comment Comments { get; set; }
 
-        public virtual Like Like { get; set; }
+        public string sortIdeaBy { get; set; }
     }
 }

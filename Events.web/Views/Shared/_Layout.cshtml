@@ -35,7 +35,6 @@
                     @if (User.IsInRole("Staff"))
                     {
                         <li>@Html.ActionLink("Submission", "Index", "ViewSubmissions")</li>
-                        <li>@Html.ActionLink("Idea", "Index", "Ideas")</li>
                     }
                     @if (User.IsInRole("Administrator") || (User.IsInRole("QAManager")) || (User.IsInRole("")))
                     {
@@ -45,7 +44,7 @@
                         <li>@Html.ActionLink("Submission", "Index", "Submissions", new { area = "Admin" }, new { })</li>
                     }
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @Html.Partial("~/Views/Shared/_LoginPartial.cshtml")
             </div>
         </div>
     </div>

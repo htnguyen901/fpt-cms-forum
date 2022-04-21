@@ -69,8 +69,6 @@
                         <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
                     }
                     else if ((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId == Model.Idea.IdeaId).Count() > 0 ) || Ajax.ViewBag.IsLike == true)
-
-                    //else if (Model.Idea.Likes.Any(u => u.UserId == userid && u.IdeaId == Model.Idea.IdeaId) || Ajax.ViewBag.IsLike == true)
                     {
                         <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
                     }

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
 using Events.web.ViewModels;
+using PagedList;
 
 namespace Events.web.Controllers
 {
@@ -16,30 +17,37 @@ namespace Events.web.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Submissions
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Submissions.ToList());
+            var sub = db.Submissions.ToList();
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            return View(sub.ToPagedList(pageNumber,pageSize));
         }
 
-        public ActionResult ViewIdea(int id)
-        {
 
-            var submission = db.Submissions
-                .Include(i => i.Ideas)
-                .FirstOrDefault(i => i.SubmissionId == id);
+        //No longer used
+        //public ActionResult ViewIdea(int id)
+        //{
 
-            var idea = db.Ideas
-                .Include(i => i.Categories)
-                .FirstOrDefault(i => i.SubmissionId == id);
+        //    var submission = db.Submissions
+        //        .Include(i => i.Ideas)
+        //        .FirstOrDefault(i => i.SubmissionId == id);
 
-            var model =  new SubmissionIdeaViewModel
-            {
-                Submission = submission,
-                Idea = idea
-            };
+        //    var idea = db.Ideas
+        //        .Include(i => i.Categories)
+        //        .FirstOrDefault(i => i.SubmissionId == id);
 
-            return View(model);
-        }
+        //    var model =  new SubmissionIdeaViewModel
+        //    {
+        //        Submission = submission,
+        //        Idea = idea
+        //    };
+
+        //    return View(model);
+        //}
 
         // GET: Submissions/Details/5
         public ActionResult Details(int? id)

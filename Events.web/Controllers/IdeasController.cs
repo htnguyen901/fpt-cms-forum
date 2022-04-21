@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Events.web.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using PagedList;
 
 namespace Events.web.Controllers
 {
@@ -18,21 +19,39 @@ namespace Events.web.Controllers
 
 
         // GET: Ideas
-        public ActionResult Index(int? id)
+        public ActionResult Index(int id, int? page, string sortBy)
         {
-            
-            if (id == null)
-            {
-                var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions);
-                return View(ideas.ToList());
-            }
-            else
-            {
-                var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions)
-                    .Where(i => i.Submissions.SubmissionId == id);
-                return View(ideas.ToList());
-            }
+            ViewBag.currentSort = sortBy;
 
+            var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions).Include(i => i.Comments).Include(i => i.Views).AsQueryable();
+            
+
+                //var ideas = db.Ideas.AsQueryable();
+
+                ideas = ideas.Where(i => i.Submissions.SubmissionId == id);
+
+                switch (sortBy)
+                {
+                    case "date":
+                        ideas = ideas.OrderByDescending(i => i.CreateDate);
+                        break;
+                    case "comment":
+                        ideas = ideas.OrderByDescending(i => i.Comments.Select(c => c.CreateDate).FirstOrDefault());
+                        break;
+                    case "view":
+                        ideas = ideas.OrderByDescending(i => i.Views.Count());
+                        break;
+                    default:
+                        ideas = ideas.OrderByDescending(i => i.CreateDate);
+                        break;
+
+                }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            return View(ideas.ToPagedList(pageNumber, pageSize));
+            
+            //return View(ideas.ToList());
         }
 
         // GET: Ideas/Details/5
