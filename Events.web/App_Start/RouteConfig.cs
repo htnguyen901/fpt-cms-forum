@@ -18,6 +18,11 @@ namespace Events.web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            //routes.MapRoute(
+            //    name:"CommentsCleanRoute",
+            //    url:"Comments?ideaid={id}/{action}",
+            //    defaults: new { controller = "Comments", action = "Index" });
         }
     }
 }

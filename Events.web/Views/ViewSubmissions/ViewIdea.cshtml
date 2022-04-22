@@ -1,0 +1,49 @@
+﻿@model Events.web.ViewModels.SubmissionIdeaViewModel
+@{
+    ViewBag.Title = "ViewIdea";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Submission Detail</h2>
+
+
+<div class="form-group">
+    <div class="col-md-10">
+        <h1>@Html.Raw(Model.Submission.SubmissionName)</h1>
+        <h2>@Html.Raw(Model.Submission.SubmissionDescription)</h2>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-10 mx-auto">
+    Closure Date: @Html.Raw(Model.Submission.ClosureDate)
+</div>
+<div class="col-lg-8 col-md-10 mx-auto">
+    Final Closure Date: @Html.Raw(Model.Submission.FinalClosureDate)
+</div>
+<div class="row">
+    <div class="col-md-offset-1 col-md-11">
+        <h3 class="mb-5"> @Model.Submission.Ideas.Count() Ideas</h3>
+        <ul class="idea-list idea-top" list="@Model.Submission.Ideas" count="0">
+            @foreach (var idea in Model.Submission.Ideas)
+            {
+                <li class="idea" style="margin-top: 30px;">
+                    <div class="idea-body">
+                        @if (idea.isAnon == true)
+                        {
+                            <h4 class="idea-poster-name"> Anonymous User</h4>
+
+                        }
+                        else
+                        {
+                            <h4 class="idea-poster-name"> @idea.ApplicationUser.FullName</h4>
+                        }
+                        <div class="idea-date"> @idea.CreateDate.ToString("MMM d, yyyy hh:mm tt")</div>
+                        <p class="idea-message"> @idea.Content</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@Html.ActionLink("Post New Idea", "Create", "Ideas", new {id = Model.Submission.SubmissionId}, null)

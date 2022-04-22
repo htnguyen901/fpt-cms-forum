@@ -34,19 +34,17 @@
                     }
                     @if (User.IsInRole("Staff"))
                     {
-                        <li>@Html.ActionLink("View All Courses", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Course Category", "CourseCategory", "TrainingStaff")</li>
-                        <li>@Html.ActionLink("Trainee", "Trainee", "TrainingStaff")</li>
-                        <li>@Html.ActionLink("Instructor", "Trainer", "TrainingStaff")</li>
+                        <li>@Html.ActionLink("Submission", "Index", "ViewSubmissions")</li>
                     }
                     @if (User.IsInRole("Administrator") || (User.IsInRole("QAManager")) || (User.IsInRole("")))
                     {
-                        <li>@Html.ActionLink("Department", "Index", "Departments", new {area="Admin"}, new { })</li>
-                        <li>@Html.ActionLink("Users", "QACoordinator", "Admin", new { area = "Admin" }, null)</li>
+                        <li>@Html.ActionLink("Department", "Index", "Departments", new { area = "Admin" }, new { })</li>
+                        <li>@Html.ActionLink("Users", "Index", "Users", new { area = "Admin" }, new { })</li>
                         <li>@Html.ActionLink("Category", "Index", "Categories", new { area = "Admin" }, new { })</li>
+                        <li>@Html.ActionLink("Submission", "Index", "Submissions", new { area = "Admin" }, new { })</li>
                     }
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @Html.Partial("~/Views/Shared/_LoginPartial.cshtml")
             </div>
         </div>
     </div>

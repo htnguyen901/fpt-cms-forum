@@ -12,13 +12,20 @@ namespace Events.web.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
-        public IDbSet<Category> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<File> Files { get; set; }
 
-        public IDbSet<Department> Departments { get; set; }
+        public virtual DbSet<Idea> Ideas { get; set; }
 
-        //public IDbSet<CourseCategory> CourseCategories { get; set; }
+        public virtual DbSet<Reaction> Reactions { get; set; }
 
-        //public IDbSet<CoursesAssigned> CoursesAssigned { get; set; }
+        public virtual DbSet<Submission> Submissions { get; set; }
+
+        public virtual DbSet<View> Views { get; set; }
+
+        public virtual DbSet<Like> Likes { get; set; }
 
         public ApplicationDbContext()
             : base("CMSEntities", throwIfV1Schema: false)

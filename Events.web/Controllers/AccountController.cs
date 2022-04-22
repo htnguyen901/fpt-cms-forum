@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Events.web.Models;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace Events.web.Controllers
 {
@@ -143,31 +144,11 @@ namespace Events.web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            if (User.IsInRole("TrainingStaff"))
-            {
-                var role = Db.Roles
-                    .Where(r => r.Name == "Trainee")
-                    .ToList();
-                ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-                return View();
-            }
-            if (User.IsInRole("Administrator"))
-            {
-                var role = Db.Roles
-                    .Where(r => r.Name == "Trainer")
-                    .ToList();
-                var trainrole = Db.Roles
-                    .Where(r => r.Name == "TrainingStaff")
-                    .FirstOrDefault();
-                role.Add(trainrole);
-                ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
-                return View();
-            }
             ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
+            ViewBag.DepartmentId = new SelectList(Db.Departments, "DepartmentId", "DepartmentName");
             return View();
         }
 
-        private bool userExist(string id) { return Db.Users.Any(x => x.Id == id); }
 
         //
         // POST: /Account/Register
@@ -176,15 +157,18 @@ namespace Events.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model, ApplicationUser user)
         {
-            if (ModelState.IsValid)
-            {
-                if(!userExist(user.Id))
+
+                if (ModelState.IsValid)
                 {
+
                     user = new ApplicationUser
                     {
                         FullName = model.FullName,
-                        StaffId = model.StaffId,
+                        StaffId = Db.Users.Max(x => x.StaffId) + 1,
+                        UserName = model.Email,
+                        Email = model.Email,
                         Role = model.Role,
+                        DepartmentId = model.DepartmentId
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
@@ -200,17 +184,15 @@ namespace Events.web.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     AddErrors(result);
+                    Db.Users.Add(user);
+                    Db.SaveChanges();
+
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                }
-                
-                
-            }
+            
 
             // If we got this far, something failed, redisplay form
-            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name");
+            ViewBag.Role = new SelectList(Db.Roles, "Name", "Name", user.Role);
+            ViewBag.DepartmentId = new SelectList(Db.Departments, "DepartmentId", "DepartmentName", user.DepartmentId);
             return View(model);
         }
 

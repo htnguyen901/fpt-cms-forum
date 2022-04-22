@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -89,6 +90,8 @@ namespace Events.web.Models
         public string ConfirmPassword { get; set; }
 
         public string Role { get; set; }
+
+        public IdentityRole Roles { get; set; }
 
         public int DepartmentId { get; set; }
     }   
