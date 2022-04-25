@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            
+
             <div class="col-md-10">
                 @if (Model.Idea.isAnon == true)
                 {
@@ -60,24 +60,24 @@
 
         </div>
         <div>
-            
-                @{
-                    string userid = User.Identity.GetUserId();
 
-                    if (!User.Identity.IsAuthenticated)
-                    {
-                        <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
-                    }
-                    else if ((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId == Model.Idea.IdeaId).Count() > 0 ) || Ajax.ViewBag.IsLike == true)
-                    {
-                        <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
-                    }
-                    else
-                    {
-                        <a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span></a>
-                    }
+            @{
+                string userid = User.Identity.GetUserId();
+
+                if (!User.Identity.IsAuthenticated)
+                {
+                    <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
+                }
+                else if ((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId == Model.Idea.IdeaId).Count() > 0) || Ajax.ViewBag.IsLike == true)
+                {
+                    <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
+                }
+                else
+                {
+                    <a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span></a>
+                }
             }
-            
+
         </div>
 
         <div class="row">
@@ -105,78 +105,79 @@
                     }
                 </ul>
 
-                @if (User.Identity.IsAuthenticated)
+                @if (User.Identity.IsAuthenticated && Model.Submission.FinalClosureDate >= DateTime.Now)
                 {
-                            using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
-                            {
-                    <table cellpadding="0" cellspacing="0">
-                        <tr>
-                            <th colspan="2" align="center">Comments</th>
-                        </tr>
-                        <tr>
-                            <th>
-                                Post Anonymously?  @Html.CheckBoxFor(model => model.Comments.isAnon)
+                    using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
+                    {
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="2" align="center">Comments</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Post Anonymously?  @Html.CheckBoxFor(model => model.Comments.isAnon)
 
-                            </th>
-                        </tr>
-                        <tr>
-                            @Html.HiddenFor(model => model.Idea.IdeaId)
-                        </tr>
-                        <tr>
-                            <td>Content: </td>
-                            <td>
-                                @Html.TextBoxFor(m => m.Comments.Content, htmlAttributes: new { @Value = "" })
-                            </td>
-                        </tr>
+                                </th>
+                            </tr>
+                            <tr>
+                                @Html.HiddenFor(model => model.Idea.IdeaId)
+                            </tr>
+                            <tr>
+                                <td>Content: </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Comments.Content, htmlAttributes: new { @Value = "" })
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td></td>
-                            <td><input type="submit" value="Post Comment" /></td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Post Comment" /></td>
+                            </tr>
+                        </table>
                     }
                 }
-                else
+                else if (!User.Identity.IsAuthenticated)
                 {
                     <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comments?ideaid=@Model.Idea.IdeaId">Login to Reply</a>
 
                 }
+
             </div>
         </div>
     </div>
 </div>
 <p>
 
-    @Html.ActionLink("Back to List", "Index", "Ideas", new {id=Model.Idea.SubmissionId}, null)
+    @Html.ActionLink("Back to List", "Index", "Ideas", new { id = Model.Idea.SubmissionId }, null)
 </p>
 
-    <script>
+<script>
 
-            //LIKE
-            $(document).on("click", "a.like", function () {
-                var id = $(this).data("id");
-                var link = "/Comments/LikeThis/" + id;
-                var a = $(this);
-                $.ajax({
-                    type: "GET",
-                    url: link,
-                    success: function (result) {
-                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Unlike").removeClass("like").addClass("unlike");
-                    }
-                });
-            });
-            //UNLIKE
-            $(document).on("click", "a.unlike",function () {
-                var id = $(this).data("id");
-                var link = "/Comments/UnlikeThis/" + id;
-                var a = $(this);
-                $.ajax({
-                    type: "GET",
-                    url: link,
-                    success: function (result) {
-                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Like").removeClass("unlike").addClass("like");
-                    }
-                });
-            });
+    //LIKE
+    $(document).on("click", "a.like", function () {
+        var id = $(this).data("id");
+        var link = "/Comments/LikeThis/" + id;
+        var a = $(this);
+        $.ajax({
+            type: "GET",
+            url: link,
+            success: function (result) {
+                a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Unlike").removeClass("like").addClass("unlike");
+            }
+        });
+    });
+    //UNLIKE
+    $(document).on("click", "a.unlike", function () {
+        var id = $(this).data("id");
+        var link = "/Comments/UnlikeThis/" + id;
+        var a = $(this);
+        $.ajax({
+            type: "GET",
+            url: link,
+            success: function (result) {
+                a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Like").removeClass("unlike").addClass("like");
+            }
+        });
+    });
 
-    </script>
+</script>

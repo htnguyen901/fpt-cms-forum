@@ -29,6 +29,8 @@ namespace Events.web.Repository
             var comment = repo.GetComment(id);
             var like = repo.GetLike(id);
 
+            var submission = repo.GetSubmission(id);
+
             if (idea is null)
             {
                 return null;
@@ -38,7 +40,8 @@ namespace Events.web.Repository
             {
                 Idea = idea,
                 Comments = comment,
-                Like = like
+                Like = like,
+                Submission = submission
             };
 
         }

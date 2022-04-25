@@ -45,5 +45,7 @@
         </ul>
     </div>
 </div>
-
-@Html.ActionLink("Post New Idea", "Create", "Ideas", new {id = Model.Submission.SubmissionId}, null)
+@if (Model.Submission.ClosureDate >= DateTime.Now)
+{
+    @Html.ActionLink("Post New Idea", "Create", "Ideas", new { id = Model.Submission.SubmissionId }, null)
+}

@@ -29,7 +29,16 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        var bgColor = "bg-light";
+        if (item.FinalClosureDate <= DateTime.Now)
+        {
+            bgColor = "bg-warning";
+        }
+        else if (item.ClosureDate <= DateTime.Now)
+        {
+            bgColor = "bg-danger";
+        }
+        <tr class="@bgColor">
             <td>
                 @Html.DisplayFor(modelItem => item.SubmissionName)
             </td>
@@ -44,7 +53,7 @@
             </td>
             <td>
 
-                @Html.ActionLink("View Ideas", "Index", "Ideas", new { id = item.SubmissionId }, null) |
+                @Html.ActionLink("View Ideas", "Index", "Ideas", new { id = item.SubmissionId }, null)
 
             </td>
         </tr>

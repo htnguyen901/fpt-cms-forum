@@ -22,6 +22,7 @@ namespace Events.web.Controllers
         public ActionResult Index(int id, int? page, string sortBy)
         {
             ViewBag.currentSort = sortBy;
+            ViewBag.submission = db.Submissions.Where(s => s.SubmissionId == id).FirstOrDefault();
 
             var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions).Include(i => i.Comments).Include(i => i.Views).AsQueryable();
             
@@ -102,13 +103,20 @@ namespace Events.web.Controllers
                     ApplicationUser = currentU,
                     isAnon = idea.isAnon
                 };
-                db.Ideas.Add(idea);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var submission = db.Submissions.Where(s => s.SubmissionId == id).FirstOrDefault();
+
+                if (submission.ClosureDate >= DateTime.Now)
+                {
+                    db.Ideas.Add(idea);
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction("Index", new {id = id});
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", idea.CategoryId);
-            ViewBag.SubmissionId = new SelectList(db.Submissions, "SubmissionId", "SubmissionName", idea.SubmissionId);
+            ViewBag.SubmissionId = id;
             return View(idea);
         }
 
