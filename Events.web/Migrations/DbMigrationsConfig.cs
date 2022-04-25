@@ -97,7 +97,8 @@ namespace Events.web.Migrations
                 var adminPassword = "Admin@1";
                 //var adminDateTime = DateTime.Now;
                 string adminRole = "Administrator";
-                CreateAdminUser(context, adminEmail, adminUserName, adminFullName, adminPassword, adminRole);
+                int departmentId = 1;
+                CreateAdminUser(context, adminEmail, adminUserName, adminFullName, adminPassword, adminRole, departmentId);
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
                 var role = new IdentityRole();
                 roleManager.Create(new IdentityRole("QAManager"));
@@ -137,13 +138,14 @@ namespace Events.web.Migrations
             }
         }
 
-        private void CreateAdminUser(ApplicationDbContext context, string adminEmail, string adminUserName, string adminFullName, string adminPassword, string adminRole)
+        private void CreateAdminUser(ApplicationDbContext context, string adminEmail, string adminUserName, string adminFullName, string adminPassword, string adminRole, int departmentId)
         {
             var adminUser = new ApplicationUser
             {
                 UserName = adminUserName,
                 FullName = adminFullName,
                 Email = adminEmail,
+                DepartmentId = departmentId
             };
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);

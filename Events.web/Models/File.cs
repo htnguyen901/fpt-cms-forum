@@ -14,5 +14,9 @@ namespace Events.web.Models
         public int Ideaid { get; set; }
 
         public virtual Idea Idea { get; set; }
+        //public IEnumerable<HttpPostedFileBase> files { get; set; }
+        //public string File { get; set; }
+        //public long Size { get; set; }
+        //public string Type { get; set; }
     }
 }

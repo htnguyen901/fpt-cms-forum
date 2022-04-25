@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
@@ -11,8 +15,6 @@ using Events.web.Models;
 namespace Events.web.Areas.Admin.Controllers
 {
     // /admin/submission
-
-
     public class SubmissionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -22,6 +24,34 @@ namespace Events.web.Areas.Admin.Controllers
         {
             return View(db.Submissions.ToList());
         }
+
+        //upload
+        //public ActionResult Download(int submissionId)
+        //{
+        //    //ExportExcel(submissionId);
+        //    ExportZIP(submissionId);
+        //    return RedirectToAction("Index");
+        //}
+
+        //public ActionResult ExportZIP(int submissionId)
+        //{
+        //    var path = Path.Combine("file", "submission_" + submissionId);
+        //    if (Directory.Exists(path))
+        //    {
+        //        var zipPath = Path.Combine("file", "submission_" + submissionId + ".zip");
+        //        using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Create))
+        //        {
+        //            using(ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+        //            {
+        //                archive.CreateEntryFromFile(path, path);  
+        //            }
+        //        }
+        //        byte[] fileBytes = System.IO.File.ReadAllBytes(zipPath);
+        //        return File(fileBytes, MediaTypeNames.Application.Zip, Path.GetFileName(zipPath));
+        //    }
+        //    return NoContent();
+            
+        //}
 
         // GET: Admin/Submissions/Details/5
         public ActionResult Details(int? id)

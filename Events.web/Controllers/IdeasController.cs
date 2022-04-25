@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNetCore.Http;
 using PagedList;
 
 namespace Events.web.Controllers
@@ -70,6 +73,24 @@ namespace Events.web.Controllers
             return View(idea);
         }
 
+        //upload file
+        public string UploadFile(IFormFile file, int submissionId, int ideaId)
+        {
+            var path = "";
+            if (file.Length > 0)
+            {
+                //file / submission{id}
+                path = Path.Combine("file", "submission_" + submissionId, "idea_" + ideaId);
+                if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
+                //upload file
+                //{path}/ {filename}
+                path = Path.Combine(path, file.FileName);
+                var stream = new FileStream(path, FileMode.Create);
+                file.CopyTo(stream);
+            }
+            return path;
+        }
+
         // GET: Ideas/Create
         public ActionResult Create(int id)
         {
@@ -83,7 +104,7 @@ namespace Events.web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdeaId,Title,Description,Content,CategoryId,SubmissionId")] Idea idea, int id)
+        public ActionResult Create([Bind(Include = "IdeaId,Title,Description,Content,CategoryId,SubmissionId")] Idea idea, int id, IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +129,15 @@ namespace Events.web.Controllers
 
                 if (submission.ClosureDate >= DateTime.Now)
                 {
+                    var newFile = new Models.File()
+                    {
+                        FilePath = UploadFile(file, submission.SubmissionId, idea.IdeaId),
+                        CreateDate = DateTime.Now,
+                        LastModifiedDate = DateTime.Now,
+                        Idea = idea
+                    };
                     db.Ideas.Add(idea);
+                    db.Files.Add(newFile);
                     db.SaveChanges();
                 }
 
