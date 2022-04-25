@@ -16,26 +16,18 @@
 <div>
     @using (Html.BeginForm("Index", "Ideas", FormMethod.Get))
     {
-        <select class="form-control" id="sortBy" name="sortBy" data-id="" onChange="sortBy();" value="GO">
-            <option value="date" elected="selected">Recently Uploaded</option>
-            <option value="comment">Latest Commented</option>
-            <option value="view">Most Viewed</option>
-        </select>
+    <select class="form-control" id="sortBy" name="sortBy" data-id="" onChange="sortBy();" value="">
+        <option value="" selected="selected"></option>
+        <option value="date">Recently Uploaded</option>
+        <option value="comment">Latest Commented</option>
+        <option value="view">Most Viewed</option>
+    </select>
 
         <input type="submit" value="Sort" />
 
 
     }
 
-
-    @*Issue with Jquery, changed approach*@
-    @*<form name="sortSelect">
-            <select class="form-control" id="sortBy" name="sortBy" data-id="" onChange="sortBy();" value="GO">
-                <option value="date">Recently Uploaded</option>
-                <option value="comment">Latest Commented</option>
-                <option value="view">Most Viewed</option>
-            </select>
-        </form>*@
 </div>
 <table class="table">
     <tr>
@@ -77,45 +69,54 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categories.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Submissions.SubmissionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-            </td>
-            <td>
-                @item.Comments.Count()
-            </td>
-            <td>
-                @item.Views.Count()
-            </td>
-            <td>
-                @item.LikeCount
-            </td>
-            <td>
-                @Html.ActionLink("View Comments", "Index", "Comments", new { id = item.IdeaId }, null)
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Categories.CategoryName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Submissions.SubmissionName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Content)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastModifiedDate)
+    </td>
+    @if (item.isAnon == true)
+    {
+        <td>
+            Anonymous User
+        </td>
+    }
+    else
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+        </td>
+    }
+    <td>
+        @item.Comments.Count()
+    </td>
+    <td>
+        @item.Views.Count()
+    </td>
+    <td>
+        @item.LikeCount
+    </td>
+    <td>
+        @Html.ActionLink("View Comments", "Index", "Comments", new { id = item.IdeaId }, null)
 
-            </td>
-        </tr>
+    </td>
+</tr>
     }
 
 </table>
