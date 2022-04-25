@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -21,6 +23,40 @@ namespace Events.web.Areas.Admin.Controllers
         public ActionResult Index()
         {
             return View(db.Submissions.ToList());
+        }
+
+       public ActionResult DashBoard()
+        {
+            return View();
+        }
+
+        public JsonResult DashBoardcounts()
+        {
+            try
+            {
+                string[] DashBoardcounts = new string[2];
+                string mann = ConfigurationManager.ConnectionStrings["CMSEntities"].ConnectionString;
+                SqlConnection con = new SqlConnection(mann);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("select count(CONVERT(date, ClosureDate)) as date,(select count(CONVERT(date, ClosureDate)) from Submissions where ClosureDate like '%2020%') as closuredate from Submissions where ClosureDate like '%2019%'", con);
+                DataTable dt = new DataTable();
+                SqlDataAdapter cmd1 = new SqlDataAdapter(cmd);
+                cmd1.Fill(dt);
+                if(dt.Rows.Count == 0)
+                {
+                    DashBoardcounts[0] = "0";
+                    DashBoardcounts[1] = "0";
+                }
+                else
+                {
+                    DashBoardcounts[0] = dt.Rows[0]["date"].ToString();
+                    DashBoardcounts[1] = dt.Rows[0]["closuredate"].ToString();
+                }
+                return Json(new { DashBoardcounts }, JsonRequestBehavior.AllowGet);
+            } catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         // GET: Admin/Submissions/Details/5
