@@ -8,9 +8,10 @@
 
 <h2>Ideas Detail</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (ViewBag.submission.ClosureDate >= DateTime.Now)
+{
+    @Html.ActionLink("Post New Idea", "Create", "Ideas", new { id = ViewBag.submission.SubmissionId }, null)
+}
 
 <div>
     @using (Html.BeginForm("Index", "Ideas", FormMethod.Get))
@@ -118,6 +119,8 @@
     }
 
 </table>
+
+
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",

@@ -36,6 +36,14 @@ namespace Events.web.Repository
                 .FirstOrDefault(i => i.IdeaId == id);
         }
 
+        public Submission GetSubmission(int ideaid)
+        {
+            var idea = context.Ideas.Where(i => i.IdeaId == ideaid).FirstOrDefault();
+            return context.Submissions
+                .Include(s => s.Ideas)
+                .FirstOrDefault(s => s.SubmissionId == idea.SubmissionId);
+        }
+
         public Comment GetComment(int commentId)
         {
             return context.Comments

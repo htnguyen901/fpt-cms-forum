@@ -159,18 +159,13 @@ namespace Events.web.Controllers
         {
 
 
-            //var repo = new PostRepository(db);
-            //var idea = repo.GetIdea(ideaCommentViewModel.Idea.IdeaId);
-            var ideaid = ideaCommentViewModel.Idea.IdeaId;
-            var currentIdea = db.Ideas.Find(ideaid);
 
-            //var comment = ideaCommentViewModel.Comments;
+            var ideaid = ideaCommentViewModel.Idea.IdeaId;
+            var currentIdea = db.Ideas.Include(i => i.Submissions).Where(i => i.IdeaId == ideaid).FirstOrDefault();
+
 
             var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             var currentU = db.Users.Find(currentUser.Id);
-            //comment.ApplicationUser = currentU;
-
-            //_comment.Ideas = idea;
 
             var _comment = new Comment
             {
@@ -184,9 +179,11 @@ namespace Events.web.Controllers
                 isAnon = ideaCommentViewModel.Comments.isAnon
             };
 
-
-            db.Comments.Add(_comment);
-            db.SaveChanges();
+            if (currentIdea.Submissions.FinalClosureDate >= DateTime.Now)
+            {
+                db.Comments.Add(_comment);
+                db.SaveChanges();
+            }
 
             return RedirectToAction("Index", "Comments", new { id=ideaCommentViewModel.Idea.IdeaId});
         }
