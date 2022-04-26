@@ -631,6 +631,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\IdeaCommentViewModel.cs" />
     <Compile Include="ViewModels\IdeaSortViewModel.cs" />
+    <Compile Include="ViewModels\IdeaFileViewModel.cs" />
     <Compile Include="ViewModels\SubmissionIdeaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
