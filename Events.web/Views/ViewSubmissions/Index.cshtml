@@ -30,33 +30,33 @@
     @foreach (var item in Model)
     {
         var bgColor = "bg-light";
-        if (item.FinalClosureDate <= DateTime.Now)
+        if (item.ClosureDate <= DateTime.Now && item.FinalClosureDate > DateTime.Now)
         {
             bgColor = "bg-warning";
         }
-        else if (item.ClosureDate <= DateTime.Now)
+        else if (item.FinalClosureDate <= DateTime.Now)
         {
             bgColor = "bg-danger";
         }
-        <tr class="@bgColor">
-            <td>
-                @Html.DisplayFor(modelItem => item.SubmissionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubmissionDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosureDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinalClosureDate)
-            </td>
-            <td>
+<tr class="@bgColor">
+    <td>
+        @Html.DisplayFor(modelItem => item.SubmissionName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SubmissionDescription)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ClosureDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FinalClosureDate)
+    </td>
+    <td>
 
-                @Html.ActionLink("View Ideas", "Index", "Ideas", new { id = item.SubmissionId }, null)
+        @Html.ActionLink("View Ideas", "Index", "Ideas", new { id = item.SubmissionId }, null)
 
-            </td>
-        </tr>
+    </td>
+</tr>
     }
 
 </table>

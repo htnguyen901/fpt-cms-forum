@@ -12,6 +12,7 @@ using Events.web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PagedList;
+using Events.web.Repository;
 
 namespace Events.web.Controllers
 {
@@ -87,6 +88,7 @@ namespace Events.web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(IdeaFileViewModel ideaFileVM, int id)
         {
+            var repo = new PostRepository(db);
             if (ModelState.IsValid)
             {
                 var file = ideaFileVM.File;
@@ -122,27 +124,38 @@ namespace Events.web.Controllers
                         .OrderByDescending(i => i.IdeaId)
                         .FirstOrDefault();
                     //save file to server folder
-                    if (file.ContentLength > 0)
+                    if (file != null)
                     {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var filePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId);
-                        if (!Directory.Exists(filePath)) { Directory.CreateDirectory(filePath); }
-                        filePath = Path.Combine(filePath, fileName);
-                        file.SaveAs(filePath);
+                        if (file.ContentLength > 0)
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var filePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId);
+                            if (!Directory.Exists(filePath)) { Directory.CreateDirectory(filePath); }
+                            filePath = Path.Combine(filePath, fileName);
+                            file.SaveAs(filePath);
+
+                            //insrt file to db
+                            var newFile = new Models.File()
+                            {
+                                FilePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId, Path.GetFileName(file.FileName)),
+                                CreateDate = DateTime.Now,
+                                LastModifiedDate = DateTime.Now,
+                                Ideaid = thisIdea.IdeaId,
+                                Idea = thisIdea
+
+                            };
+
+                            db.Files.Add(newFile);
+                            db.SaveChanges();
+                        }
                     }
-                    // insert file to db
-                    var newFile = new Models.File()
-                    {
-                        FilePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId, Path.GetFileName(file.FileName)),
-                        CreateDate = DateTime.Now,
-                        LastModifiedDate = DateTime.Now,
-                        Ideaid = thisIdea.IdeaId,
-                        Idea = thisIdea
 
-                    };
-
-                    db.Files.Add(newFile);
-                    db.SaveChanges();
+                    //Send email to QA Coordinator
+                    string subject = $"New Idea has to submitted to your Department:  '{currentU.Departments.DepartmentName},' ";
+                    string content = $"{currentU.UserName} have submitted new Idea to Department '{currentU.Departments.DepartmentName},' ,\n\n" +
+                            $"Title: '{idea.Title}' in the submission '{idea.SubmissionId}',\n\n" +
+                                $"Content: '{idea.Content}'";
+                    repo.SendMail(currentU, content, subject);
                 }
 
                 return RedirectToAction("Index", new { id = id });

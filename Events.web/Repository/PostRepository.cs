@@ -11,6 +11,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Events.web.ViewModels;
 using System.Threading.Tasks;
+using MimeKit;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 
 namespace Events.web.Repository
 {
@@ -35,6 +38,74 @@ namespace Events.web.Repository
                 .Include(i => i.Comments.Select(c => c.ApplicationUser))
                 .FirstOrDefault(i => i.IdeaId == id);
         }
+
+        public void SendMail(ApplicationUser user, string content, string subject)
+        {
+            //var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            MailboxAddress from = new MailboxAddress(user.FullName, user.Email);
+
+            var qa = context.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "QACoordinator").FirstOrDefault();
+
+            MailboxAddress to = new MailboxAddress(qa.FullName, qa.Email);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            BodyBuilder bodyBuilder = new BodyBuilder();
+            bodyBuilder.TextBody = content;
+
+            MimeMessage message = new MimeMessage();
+            message.From.Add(from);
+            message.To.Add(to);
+            message.Subject = subject;
+            message.Body = bodyBuilder.ToMessageBody();
+
+            SmtpClient client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 465, true);
+            client.Authenticate(user.Email, user.tokenPass);
+
+            client.Send(message);
+            client.Disconnect(true);
+            client.Dispose();
+
+        }
+
+        public void NotiComment(ApplicationUser user, int ideaid, string content, string subject)
+        {
+            //var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            
+            var thisIdea = context.Ideas.Where(i => i.IdeaId == ideaid).FirstOrDefault();
+
+            var authorId = thisIdea.UserId;
+
+            var ideaOwner = context.Users.Where(u => u.Id == authorId).FirstOrDefault();
+
+            MailboxAddress from = new MailboxAddress(user.FullName, user.Email);
+
+            var qa = context.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "QACoordinator").FirstOrDefault();
+
+            MailboxAddress to = new MailboxAddress(ideaOwner.FullName, ideaOwner.Email);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            BodyBuilder bodyBuilder = new BodyBuilder();
+            bodyBuilder.TextBody = content;
+
+            MimeMessage message = new MimeMessage();
+            message.From.Add(from);
+            message.To.Add(to);
+            message.Subject = subject;
+            message.Body = bodyBuilder.ToMessageBody();
+
+            SmtpClient client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 465, true);
+            client.Authenticate(user.Email, user.tokenPass);
+
+            client.Send(message);
+            client.Disconnect(true);
+            client.Dispose();
+
+        }
+
+
 
         public Submission GetSubmission(int ideaid)
         {

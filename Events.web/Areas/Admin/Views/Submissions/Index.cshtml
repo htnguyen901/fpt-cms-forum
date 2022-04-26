@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Events.web.Models.Submission>
+﻿@model PagedList.IPagedList<Events.web.Models.Submission>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -7,46 +9,71 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SubmissionName)
+            @Html.DisplayNameFor(model => model[0].SubmissionName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SubmissionDescription)
+            @Html.DisplayNameFor(model => model[0].SubmissionDescription)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ClosureDate)
+            @Html.DisplayNameFor(model => model[0].ClosureDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FinalClosureDate)
+            @Html.DisplayNameFor(model => model[0].FinalClosureDate)
         </th>
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubmissionName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubmissionDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ClosureDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FinalClosureDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.SubmissionId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.SubmissionId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.SubmissionId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        var bgColor = "bg-light";
+        if (item.ClosureDate <= DateTime.Now && item.FinalClosureDate > DateTime.Now)
+        {
+            bgColor = "bg-warning";
+        }
+        else if (item.FinalClosureDate <= DateTime.Now)
+        {
+            bgColor = "bg-danger";
+        }
+        <tr class="@bgColor">
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosureDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.SubmissionId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.SubmissionId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.SubmissionId })
+            </td>
+            @if (item.FinalClosureDate <= DateTime.Now)
+            {
+                <td>
+
+                    @Html.ActionLink("Download", "Download", "Submissions", new { id = item.SubmissionId }, null)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Export to CSV", "ExportToCSV", "Submissions", new { id = item.SubmissionId }, null)
+                </td>
+            }
+        </tr>
+    }
 
 </table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, currentFilter = ViewBag.CurrentFilter }))

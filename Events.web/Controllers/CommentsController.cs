@@ -158,7 +158,7 @@ namespace Events.web.Controllers
         public ActionResult Comment(IdeaCommentViewModel ideaCommentViewModel)
         {
 
-
+            var repo = new PostRepository(db);
 
             var ideaid = ideaCommentViewModel.Idea.IdeaId;
             var currentIdea = db.Ideas.Include(i => i.Submissions).Where(i => i.IdeaId == ideaid).FirstOrDefault();
@@ -184,6 +184,11 @@ namespace Events.web.Controllers
                 db.Comments.Add(_comment);
                 db.SaveChanges();
             }
+
+            string subject = $"New Idea has to submitted to :  '{currentU.Departments.DepartmentName},' ";
+            string content = $"{currentU.UserName} have submitted new Idea to Department '{currentU.Departments.DepartmentName},' ,\n\n" +
+                        $"Content: '{_comment.Content}'";
+            repo.NotiComment(currentU, ideaid, content, subject);
 
             return RedirectToAction("Index", "Comments", new { id=ideaCommentViewModel.Idea.IdeaId});
         }
