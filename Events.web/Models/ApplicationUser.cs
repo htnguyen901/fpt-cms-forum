@@ -22,6 +22,8 @@ namespace Events.web.Models
         public string Role { get; set; }
 
         public int DepartmentId { get; set; }
+
+        public string tokenPass { get; set; }
         public virtual Department Departments { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

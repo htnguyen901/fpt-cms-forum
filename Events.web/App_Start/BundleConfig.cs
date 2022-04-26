@@ -10,6 +10,8 @@ namespace Events.web
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-{version}.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-datetimepicker").Include
                 ("~/Scripts/moment.js", "~/Scripts/bootstrap-datetimepicker.js"));
