@@ -6,7 +6,7 @@
         contentType: "application/json:charset=utf-8",
         dataType: "json",
         success: function (json) {
-            debugger
+            //debugger
             var values = json.DashBoardcounts;
             var date = parseInt(values[0]);
             var closuredate = parseInt(values[1]);
@@ -44,12 +44,12 @@
                     name: 'Count',
                     colorByPoint: true,
                     data: [{
-                        name: '2019',
+                        name: '2022',
                         y: date,
                         sliced: true,
                         selected: true
                     }, {
-                        name: '2020',
+                        name: '2021',
                         y: closuredate
                     }]
                 }]

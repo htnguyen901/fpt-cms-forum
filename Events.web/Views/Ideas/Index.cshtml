@@ -1,125 +1,62 @@
-﻿@model PagedList.IPagedList<Events.web.Models.Idea>
+﻿,@model PagedList.IPagedList<Events.web.Models.Idea>
 @using PagedList.Mvc;
 
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<link href="~/Content/Create.css" rel="stylesheet" type="text/css" />
 
-<h2>Ideas Detail</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-<div>
+<div class="h-ind">
+    <h2>Ideas Detail</h2>
+</div>
+<div>   
     @using (Html.BeginForm("Index", "Ideas", FormMethod.Get))
     {
-        <select class="form-control" id="sortBy" name="sortBy" data-id="" onChange="sortBy();" value="GO">
-            <option value="date" elected="selected">Recently Uploaded</option>
-            <option value="comment">Latest Commented</option>
-            <option value="view">Most Viewed</option>
-        </select>
-
-        <input type="submit" value="Sort" />
-
-
-    }
-
-
-    @*Issue with Jquery, changed approach*@
-    @*<form name="sortSelect">
-            <select class="form-control" id="sortBy" name="sortBy" data-id="" onChange="sortBy();" value="GO">
-                <option value="date">Recently Uploaded</option>
-                <option value="comment">Latest Commented</option>
-                <option value="view">Most Viewed</option>
-            </select>
-        </form>*@
+        <div class="center">
+            <div class="k1-ind">
+                @if (ViewBag.submission.ClosureDate >= DateTime.Now)
+                {
+                    @Html.ActionLink("Post New Idea", "Create", "Ideas", new { id = ViewBag.submission.SubmissionId }, null)}
+                <select id="sources" class="custom-select" name="sortBy" data-id="" onChange="sortBy();" value="">
+                    <option value="" selected="selected" disabled="disabled">Choose</option>
+                    <option value="date">Recently Uploaded</option>
+                    <option value="comment">Latest Commented</option>
+                    <option value="view">Most Viewed</option>
+                </select>
+                <input class="btn btn-outline-primary" type="submit" value="Sort" />
+            </div>
+        </div>}
 </div>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Categories.CategoryName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Submissions.SubmissionName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Content)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].CreateDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].LastModifiedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model[0].ApplicationUser.FullName)
-        </th>
-        <th>
-            No. of Comments
-        </th>
-        <th>
-            No. of Views
-        </th>
-        <th>
-            No. of Likes
-        </th>
-        <th></th>
-    </tr>
+<div class="tab-ind">
+    <div class="table">
+        <div class="table-header">
+            <div class="header__item"><a class="filter__link">@Html.DisplayNameFor(model => model[0].Categories.CategoryName)</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">@Html.DisplayNameFor(model => model[0].Title)</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">@Html.DisplayNameFor(model => model[0].Content)</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">@Html.DisplayNameFor(model => model[0].LastModifiedDate)</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">Comments</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">Likes</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">Views</a></div>
+            <div class="header__item"><a class="filter__link filter__link--number">Post</a></div>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="table-content">
+                <div class="table-row">
+                    <div class="table-data">@Html.DisplayFor(modelItem => item.Categories.CategoryName)</div>
+                    <div class="table-data">@Html.DisplayFor(modelItem => item.Title)</div>
+                    <div class="table-data">@Html.DisplayFor(modelItem => item.Content)</div>
+                    <div class="table-data">@Html.DisplayFor(modelItem => item.LastModifiedDate)</div>
+                    <div class="table-data"> @item.Comments.Count()</div>
+                    <div class="table-data"> @item.Views.Count()</div>
+                    <div class="table-data">@item.LikeCount</div>
+                    <div class="table-data">@Html.ActionLink("Comments", "Index", "Comments", new { id = item.IdeaId }, null)</div>
+                </div>
+            </div>}
+    </div>
+</div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categories.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Submissions.SubmissionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
-            </td>
-            <td>
-                @item.Comments.Count()
-            </td>
-            <td>
-                @item.Views.Count()
-            </td>
-            <td>
-                @item.LikeCount
-            </td>
-            <td>
-                @Html.ActionLink("View Comments", "Index", "Comments", new { id = item.IdeaId }, null)
 
-            </td>
-        </tr>
-    }
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-</table>
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortBy = ViewBag.currentSort }))
-
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortBy = ViewBag.currentSort }))

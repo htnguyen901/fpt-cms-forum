@@ -1,6 +1,9 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-image: url('gre.jpg');
+    background-size: cover;
+    width: 100%;
 }
 .body-content {
     padding-left: 15px;
@@ -35,6 +38,36 @@ textarea {
 }
 
 .navbar-inverse {
-    background-color: black;
-    border-color: #080808;
+    background-color: #546de5;
+    border-color: #546de5;
+    font-weight: 700;
+    font-size: 15px;
 }
+
+
+    .navbar-inverse .navbar-brand {
+        color: #FFFF00;
+    }
+    .navbar-inverse .navbar-brand:hover {
+        color: #FFFF;
+    }
+
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #FFFF00;
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover {
+        color: #FFFF;
+    }
+.jumb {
+    margin-bottom: 50rem;
+}
+
+    .jumb p {
+        margin-top: 10rem;
+        text-align: center;
+        font-size: 3.8rem;
+        font-weight: 700;
+        color: #546de5;
+    }

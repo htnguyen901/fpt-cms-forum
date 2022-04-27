@@ -1,60 +1,46 @@
 ﻿@using Events.web.Models
 @model LoginViewModel
-@{
-    ViewBag.Title = "Log in";
-}
+@{ ViewBag.Title = "Log in"; }
 
-<h2>Login</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
+<link href="~/Content/LoginF.css" rel="stylesheet" type="text/css" />
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { }))
+{
+<section>
+
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="content">
+        <div class="form">
+            <form>
+                <h2>Login</h2>
+                <div class="input">
+                    @Html.ValidationSummary(true, "", new { })
+                    <span>@Html.LabelFor(m => m.Email, new { })</span>
+                    @Html.TextBoxFor(m => m.Email, new { })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
+                <div class="input">
+                    <span>@Html.LabelFor(m => m.Password, new { })</span>
+                    @Html.PasswordFor(m => m.Password, new { @placeholder = "*******" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { })
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
+                <div class="remember">
+                    @Html.LabelFor(m => m.RememberMe)
+                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "cb-login" })
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
+                <div class="input">
+                    <input type="submit" value="Login" name="login" class="btn btn-default" />
                 </div>
-                <p>
+                <div class="re-acc">
                     @Html.ActionLink("Register new user", "Register")
-                </p>
-                <p>
                     @Html.ActionLink("Forgot password?", "ForgotPassword")
-                </p>
-            }
-        </section>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
-</div>
+</section>}
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

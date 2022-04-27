@@ -1,0 +1,150 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+}
+
+    section .content {
+        position: relative;
+        margin: 14rem 0 10rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        height: 100%;
+        background: #fff;
+        opacity: 0.8;
+    }
+
+        section .content .form {
+            width: 50%;
+        }
+
+            section .content .form h2 {
+                color: #203b4b;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-top: 15px;
+                border-bottom: 5px solid #00a0fd;
+                display: inline-block;
+                letter-spacing: 3px;
+            }
+
+            section .content .form .input {
+                margin-bottom: 20px;
+            }
+
+                section .content .form .input span {
+                    font-size: 15px;
+                    margin-bottom: 5px;
+                    display: inline-block;
+                    color: #3097d1;
+                    font-weight: 300;
+                    font-size: 15px;
+                    letter-spacing: 3px;
+                }
+
+.input i {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    margin-top: -33px;
+    margin-left: 43vh;
+    cursor: pointer;
+}
+
+section .content .form .input input {
+    width: 100%;
+    padding: 10px 20px;
+    outline: none;
+    font-weight: 500;
+    border: 1px solid #2b21bd;
+    font-size: 20px;
+    letter-spacing: 3px;
+    background: transparent;
+    border-radius: 30px;
+}
+
+    section .content .form .input input[type="submit"] {
+        background: linear-gradient(to right, #3097d1 50%, #3097d1 50%, #2b21bd);
+        background-size: 200%;
+        background-position: 0%;
+        transition: 0.5s;
+        color: #fff;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+        section .content .form .input input[type="submit"]:hover {
+            background-position: 100% 0%;
+        }
+
+    section .content .form .input input[value="Login"]:hover {
+        font-size: 25px;
+    }
+
+section .content .form .remember {
+    margin-bottom: 12px;
+    color: #3097d1;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+@media (max-width:700px) {
+    section .img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    section .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+        section .content .form {
+            width: 100%;
+            padding: 30px;
+            background: rgb(255 255 255 / 1);
+            margin: 45px;
+        }
+
+    .input i {
+        width: 100%;
+        margin-top: -33px;
+        margin-left: 60vh;
+    }
+}
+
+#email-error, #password-error {
+    color: #ff0000;
+    background: #f5aaaa;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ff0000;
+    display: none;
+}
+
+.re-acc {
+    margin: 30px 0 30px 0;
+}
+
+    .re-acc a {
+        margin-left: 10px;
+        font-weight: 700;
+        color: #3097d1;
+    }

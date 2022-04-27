@@ -1,0 +1,149 @@
+﻿body {
+    background: #e2d5f1;
+}
+
+.k-ind {
+    border-radius: 6px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 3rem 5rem 0 5rem;
+    box-shadow: 0px 0px 4px 10px #ffffff8f;
+}
+
+    .k-ind .h-ind {
+        text-align: center;
+    }
+
+.cont {
+    font-size: 25px;
+    border-radius: 5px;
+    font-weight: 600;
+    margin: 20px 0 20px 16px;
+    width: auto;
+}
+
+.comment {
+    margin-top: 5rem;
+}
+
+    .comment .comment-body {
+        border-radius: 5px;
+    }
+
+.h {
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+    .h .view-post a {
+        margin-right: 5rem;
+        color: #3097d1;
+        border-radius: 10px;
+        opacity: 0.8;
+        font-size: 20px;
+        text-decoration: none;
+    }
+
+        .h .view-post a:hover {
+            color: #000;
+        }
+
+.rows {
+    word-wrap: break-word;
+    display: flex;
+    justify-content: center;
+}
+
+.cards {
+    padding: 20px;
+    border: none;
+    box-shadow: 0px 0px 4px 10px #ffffff8f;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin: 5rem 19rem 5rem 22rem;
+}
+
+.card {
+    padding: 20px;
+    border: none;
+    box-shadow: 0px 0px 4px 10px #ffffff8f;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+    .card .cmt-date {
+        float: right;
+    }
+
+    .card .cmt-mess {
+        padding: 10px 20px 0 20px;
+    }
+
+.dots {
+    height: 4px;
+    width: 4px;
+    margin-bottom: 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.badge {
+    padding: 7px;
+    padding-right: 9px;
+    padding-left: 16px;
+    box-shadow: 5px 6px 6px 2px #e9ecef
+}
+
+
+.comment-box {
+    padding: 5px
+}
+
+.comment-area textarea {
+    resize: none;
+    border: 1px solid #ad9f9f
+}
+
+.ano-cmt {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+    .ano-cmt input {
+        margin-left: 10px;
+    }
+
+.main {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    margin-top: 10px;
+    position: relative;
+    display: block;
+    width: 100px;
+    height: 29px;
+    border-radius: 20px;
+    background-color: #1c89ff;
+    border: solid 1px transparent;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+    .button:hover {
+        background: linear-gradient(to right, #3097d1 50%, #3097d1 50%, #2b21bd);
+        background-size: 200%;
+        background-position: 0%;
+        transition: 0.5s;
+        color: #fff;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+    }

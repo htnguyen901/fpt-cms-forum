@@ -6,177 +6,173 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/Content/Comment.css" rel="stylesheet" type="text/css" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
 <script src="//js.pusher.com/4.0/pusher.min.js"></script>
-<style>
-    .user_name {
-        font-size: 14px;
-        font-weight: bold;
-    }
 
-    .comments-list .media {
-        border-bottom: 1px dotted #ccc;
-    }
-</style>
+<div class="k-ind">
+    <div class="h-ind">
+        <h3>Idea Details</h3>
+    </div>
 
-<h2>Idea Details</h2>
-<div id="app">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Idea.Categories.CategoryName, new { @class = "control-label col-md-2" })
+        @Html.EditorFor(model => model.Idea.Categories.CategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Idea.Title, new { @class = "control-label col-md-2" })
+        @Html.EditorFor(model => model.Idea.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <hr />
+    @if (Model.Idea.isAnon == true)
+    {
+<h4>Anonymous User</h4> }
+else
+{
+<h2>@Html.Raw(Model.Idea.ApplicationUser.FullName)</h2>}
+    <div class="cont">
+        Content:
+        @Html.Raw(Model.Idea.Content)
+    </div>
 
+    <div class="h">
+        <div class="col-lg-10 col-md-10 mx-auto">@Model.Idea.Comments.Count() Comments </div>
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.Idea.Categories.CategoryName, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Idea.Categories.CategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Idea.Title, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Idea.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-            </div>
-        </div>
-
-        <div class="form-group">
-            
-            <div class="col-md-10">
-                @if (Model.Idea.isAnon == true)
+        <div class="view-post">
+            @{ string userid = User.Identity.GetUserId(); if
+                           (!User.Identity.IsAuthenticated)
                 {
-                    <h2>Anonymous User</h2>
-
-                }
-                else
-                {
-                    <h2>@Html.Raw(Model.Idea.ApplicationUser.FullName)</h2>
-
-                }
-            </div>
-        </div>
-
-        <div class="col-lg-8 col-md-10 mx-auto">
-            @Html.Raw(Model.Idea.Content)
+    <span>@Model.Idea.LikeCount Like</span> }
+else if
+((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId ==
+Model.Idea.IdeaId).Count() > 0) || Ajax.ViewBag.IsLike == true)
+{
+<a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><span>@Model.Idea.LikeCount Unlike</span></a> }
+else
+{
+<a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><span>@Model.Idea.LikeCount Like</span></a> } }
 
         </div>
-        <div>
-            
-                @{
-                    string userid = User.Identity.GetUserId();
+    </div>
+</div>
 
-                    if (!User.Identity.IsAuthenticated)
-                    {
-                        <i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span>
-                    }
-                    else if ((Model.Idea.Likes.Where(l => l.UserId == userid && l.IdeaId == Model.Idea.IdeaId).Count() > 0 ) || Ajax.ViewBag.IsLike == true)
-                    {
-                        <a href="javascript:void(0)" class="unlike" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart fa-lg text-danger"></i><span>(@Model.Idea.LikeCount) Unlike</span></a>
-                    }
-                    else
-                    {
-                        <a href="javascript:void(0)" class="like" data-id="@Model.Idea.IdeaId"><i class="fa fa-heart-o fa-lg"></i><span>(@Model.Idea.LikeCount) Like</span></a>
-                    }
-            }
-            
+
+
+<div class="container">
+
+
+    <div class="rows">
+        <div class="col-md-8">
+            <div list="@Model.Idea.Comments" count="0">
+                @foreach (var comment in Model.Idea.Comments)
+                {
+    <div class="comment">
+        <div class="comment-body">
+            @if (comment.isAnon == true)
+            {
+<div class="commenter-name">Anonymous User</div> }
+else
+{
+<div class="card">
+    <div class="cmt-name">
+        @comment.ApplicationUser.FullName
+        <div class="cmt-date">
+            @comment.CreateDate.ToString("MMM d, yyyy hh:mm tt")
         </div>
-
-        <div class="row">
-            <div class="col-md-offset-1 col-md-11">
-                <h3 class="mb-5"> @Model.Idea.Comments.Count() Comments</h3>
-                <ul class="comment-list comment-top" list="@Model.Idea.Comments" count="0">
-                    @foreach (var comment in Model.Idea.Comments)
-                    {
-                        <li class="comment" style="margin-top: 30px;">
-                            <div class="comment-body">
-                                @if (comment.isAnon == true)
-                                {
-                                    <h4 class="commenter-name"> Anonymous User</h4>
-
-                                }
-                                else
-                                {
-                                    <h4 class="commenter-name"> @comment.ApplicationUser.FullName</h4>
-
-                                }
-                                <div class="comment-date"> @comment.CreateDate.ToString("MMM d, yyyy hh:mm tt")</div>
-                                <p class="comment-message"> @comment.Content</p>
-                            </div>
-                        </li>
-                    }
-                </ul>
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                            using (Html.BeginForm("Comment", "Comments", FormMethod.Post))
-                            {
-                    <table cellpadding="0" cellspacing="0">
-                        <tr>
-                            <th colspan="2" align="center">Comments</th>
-                        </tr>
-                        <tr>
-                            <th>
-                                Post Anonymously?  @Html.CheckBoxFor(model => model.Comments.isAnon)
-
-                            </th>
-                        </tr>
-                        <tr>
-                            @Html.HiddenFor(model => model.Idea.IdeaId)
-                        </tr>
-                        <tr>
-                            <td>Content: </td>
-                            <td>
-                                @Html.TextBoxFor(m => m.Comments.Content, htmlAttributes: new { @Value = "" })
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td><input type="submit" value="Post Comment" /></td>
-                        </tr>
-                    </table>
-                    }
-                }
-                else
-                {
-                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~Comments?ideaid=@Model.Idea.IdeaId">Login to Reply</a>
-
-                }
+    </div>
+    <div class="cmt-mess">@comment.Content</div>
+</div>}
+        </div>
+    </div>}
             </div>
         </div>
     </div>
 </div>
-<p>
 
-    @Html.ActionLink("Back to List", "Index", "Ideas", new {id=Model.Idea.SubmissionId}, null)
-</p>
 
-    <script>
+<div class="cards">
+    <div class="rows">
+        <div class="col-md-5">
+            <div class="comment-box ">
+                <h4>Add a comment</h4>
+                @if (User.Identity.IsAuthenticated && Model.Submission.FinalClosureDate >=
+                DateTime.Now)
+                {
+                    using (Html.BeginForm("Comment", "Comments",
+        FormMethod.Post))
+                    {
+    <div class="ano-cmt">
+        Anonymously?
+        @Html.CheckBoxFor(model => model.Comments.isAnon)
+    </div>
+                        <div class="comment-area">
+                            @Html.HiddenFor(model => model.Idea.IdeaId)
 
-            //LIKE
-            $(document).on("click", "a.like", function () {
-                var id = $(this).data("id");
-                var link = "/Comments/LikeThis/" + id;
-                var a = $(this);
-                $.ajax({
-                    type: "GET",
-                    url: link,
-                    success: function (result) {
-                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Unlike").removeClass("like").addClass("unlike");
-                    }
-                });
-            });
-            //UNLIKE
-            $(document).on("click", "a.unlike",function () {
-                var id = $(this).data("id");
-                var link = "/Comments/UnlikeThis/" + id;
-                var a = $(this);
-                $.ajax({
-                    type: "GET",
-                    url: link,
-                    success: function (result) {
-                        a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Like").removeClass("unlike").addClass("like");
-                    }
-                });
-            });
+                            @Html.TextAreaFor(m => m.Comments.Content, htmlAttributes: new
+                       {
+                           @class = "form-control",
+                           @placeholder = "What is your view?",
+                           @rows = 7
+                       })
+                        </div>
+                                            <div class="main">
+                                                <button class="button">Send</button>
+                                            </div> }
+                                    }
+                                    else if (!User.Identity.IsAuthenticated)
+                                    {
+                        <div>
+                            <a class="reply-btn btn"
+                               asp-area="Identity"
+                               asp-page="/Account/Login"
+                               asp-route-ReturnUrl="~Comments?ideaid=@Model.Idea.IdeaId">Login to Reply</a>
+                        </div>}
 
-    </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@Html.ActionLink("Back to List", "Index", "Ideas", new { id = Model.Idea.SubmissionId }, null)
+
+
+
+<script>
+
+    //LIKE
+    $(document).on("click", "a.like", function () {
+        var id = $(this).data("id");
+        var link = "/Comments/LikeThis/" + id;
+        var a = $(this);
+        $.ajax({
+            type: "GET",
+            url: link,
+            success: function (result) {
+                a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Unlike").removeClass("like").addClass("unlike");
+            }
+        });
+    });
+    //UNLIKE
+    $(document).on("click", "a.unlike", function () {
+        var id = $(this).data("id");
+        var link = "/Comments/UnlikeThis/" + id;
+        var a = $(this);
+        $.ajax({
+            type: "GET",
+            url: link,
+            success: function (result) {
+                a.html('<i class="fa fa-heart fa-lg text-danger"></i> (' + result + ')' + " Like").removeClass("unlike").addClass("like");
+            }
+        });
+    });
+
+</script>

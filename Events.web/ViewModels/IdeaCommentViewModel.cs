@@ -13,5 +13,7 @@ namespace Events.web.ViewModels
         public virtual Comment Comments { get; set; }
 
         public virtual Like Like { get; set; }
+
+        public virtual Submission Submission { get; set; }
     }
 }

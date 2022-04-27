@@ -1,12 +1,15 @@
 ﻿using Events.web.Controllers;
 using Events.web.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 namespace Events.web.Areas.Admin.Controllers
 {
-    [MyCustomAuthorize(Roles = "Administrator, QAManager")] //Set role for admin only
+    //[MyCustomAuthorize(Roles = "Administrator, QAManager")] //Set role for admin only
     public class UsersController : BaseController //Announce class 'AdminController' from 'BaseController'
     {
         public ActionResult Index() //Publicly get action of 'Users' to set in other files
@@ -24,9 +27,26 @@ namespace Events.web.Areas.Admin.Controllers
             //}
             //return View(QACoor);
 
-            var user = Db.Users.Where(u => u.Role == "Staff, QACoordinator").ToList();
+            //var user = Db.Users.Where(u => u.Role == "Staff, QACoordinator").ToList();
 
-            return View(user);
+            //return View(user);
+            var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var currentU = Db.Users.Find(currentUser.Id);
+            var user = Db.Users.AsQueryable().ToList();
+            if (currentU.Role == "Administrator" || currentU.Role == "QAManager")
+            {
+                user = user
+                     .Where(u => u.Role == "QAManager" || u.Role == "QACoordinator").ToList();
+                return View(user);
+            }
+            else if (currentU.Role == "QACoordinator")
+            {
+                user = user
+                .Where(u => u.DepartmentId == currentU.DepartmentId).ToList();
+                return View(user);
+            }
+
+            return View();
         }
 
         [HttpGet] //Send data using a query string

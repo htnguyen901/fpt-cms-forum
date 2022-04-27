@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 using Events.web.Models;
 using Events.web.ViewModels;
 using PagedList;
+using Ionic.Zip;
 
 namespace Events.web.Controllers
 {
@@ -72,6 +74,16 @@ namespace Events.web.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        byte[] GetFile(string s)
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
         }
     }
 }

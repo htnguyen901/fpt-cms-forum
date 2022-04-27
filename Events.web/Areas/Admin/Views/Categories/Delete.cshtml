@@ -2,40 +2,63 @@
 
 @{
     ViewBag.Title = "Delete";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="~/Content/crud.css" rel="stylesheet" />
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
+<body>
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><b>Delete</b></h2>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <tbody>
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
+                    <h3>Are you sure you want to delete this?</h3>
+                    <div>
+                        <h4>Category</h4>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CategoryName)
+                            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryDescription)
-        </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.CategoryName)
+                            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoryDescription)
-        </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CategoryDescription)
+                            </dt>
 
-    </dl>
+                            <dd>
+                                @Html.DisplayFor(model => model.CategoryDescription)
+                            </dd>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+                        </dl>
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-actions no-color">
+                                <input type="submit" value="Delete" class="btn btn-default" /> |
+                                @Html.ActionLink("Back to List", "Index")
+                            </div>
+                        }
+                    </div>
+                </tbody>
+
+            </table>
         </div>
-    }
-</div>
+    </div>
+
+</body>

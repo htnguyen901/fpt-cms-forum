@@ -1,49 +1,15 @@
 ﻿@*@model Events.web.Models.EventsViewModel*@
-@{
-    ViewBag.Title = "Home Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewBag.Title = "Home Page";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
-<style>
-    .navbar-inverse {
-        background-color: black;
-        border-color: #080808;
-    }
-        .navbar-inverse .navbar-brand {
-            color: #9d9d9d;
-        }
-        .navbar-inverse .navbar-nav > li > a {
-            color: #9d9d9d;
-        }
-    .jumbotron {
-        outline: 2px solid white;
-        padding-top: 30px;
-        padding-bottom: 30px;
-        margin-bottom: 30px;
-        color: black;
-        background-color: #eeeeee;
-        background-image: url(../../../greenwich1.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 1225px;
-        height: 80vh;
-        padding: 20em;
-
-    }
-    h1 {
-        
-        
-    }
-    
-</style>
-<div class="jumbotron d-flex justify-content-center align-items-center">
-    <h1>Welcomes to FPT</h1>
-    <p class="lead">About System</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">More about us &raquo;</a></p>
+<div class="jumb">
+    <p>
+        Welcomes to Innovation Hub
+    </p>
 </div>
 @*@Html.Partial("_Events")*@
 
-@section scripts{
-    @Scripts.Render("~/bundles/ajax")
-}
+@*@section scripts{
+        @Scripts.Render("~/bundles/ajax")
+    }*@
 @* Events.web: Startup.cs/EventsController.cs *@

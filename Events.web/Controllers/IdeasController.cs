@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Events.web.Models;
+using Events.web.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PagedList;
+using Events.web.Repository;
 
 namespace Events.web.Controllers
 {
@@ -22,35 +25,36 @@ namespace Events.web.Controllers
         public ActionResult Index(int id, int? page, string sortBy)
         {
             ViewBag.currentSort = sortBy;
+            ViewBag.submission = db.Submissions.Where(s => s.SubmissionId == id).FirstOrDefault();
 
             var ideas = db.Ideas.Include(i => i.Categories).Include(i => i.Submissions).Include(i => i.Comments).Include(i => i.Views).AsQueryable();
-            
 
-                //var ideas = db.Ideas.AsQueryable();
 
-                ideas = ideas.Where(i => i.Submissions.SubmissionId == id);
+            //var ideas = db.Ideas.AsQueryable();
 
-                switch (sortBy)
-                {
-                    case "date":
-                        ideas = ideas.OrderByDescending(i => i.CreateDate);
-                        break;
-                    case "comment":
-                        ideas = ideas.OrderByDescending(i => i.Comments.Select(c => c.CreateDate).FirstOrDefault());
-                        break;
-                    case "view":
-                        ideas = ideas.OrderByDescending(i => i.Views.Count());
-                        break;
-                    default:
-                        ideas = ideas.OrderByDescending(i => i.CreateDate);
-                        break;
+            ideas = ideas.Where(i => i.Submissions.SubmissionId == id);
 
-                }
+            switch (sortBy)
+            {
+                case "date":
+                    ideas = ideas.OrderByDescending(i => i.CreateDate);
+                    break;
+                case "comment":
+                    ideas = ideas.OrderByDescending(i => i.Comments.Select(c => c.CreateDate).FirstOrDefault());
+                    break;
+                case "view":
+                    ideas = ideas.OrderByDescending(i => i.Views.Count());
+                    break;
+                default:
+                    ideas = ideas.OrderByDescending(i => i.CreateDate);
+                    break;
+
+            }
             int pageSize = 5;
             int pageNumber = (page ?? 1);
 
             return View(ideas.ToPagedList(pageNumber, pageSize));
-            
+
             //return View(ideas.ToList());
         }
 
@@ -82,34 +86,84 @@ namespace Events.web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdeaId,Title,Description,Content,CategoryId,SubmissionId")] Idea idea, int id)
+        public ActionResult Create(IdeaFileViewModel ideaFileVM, int id)
         {
+            var repo = new PostRepository(db);
             if (ModelState.IsValid)
             {
+                var file = ideaFileVM.File;
+                //TempData["Message"] = "files uploaded successfully";
+
+
                 var currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
                 var currentU = db.Users.Find(currentUser.Id);
-                idea = new Idea()
+                var idea = new Idea()
                 {
-                    IdeaId = idea.IdeaId,
                     SubmissionId = id,
-                    Title = idea.Title,
-                    CategoryId = idea.CategoryId,
-                    Description = idea.Description,
-                    Content = idea.Content,
+                    Title = ideaFileVM.Idea.Title,
+                    CategoryId = ideaFileVM.CategoryId,
+                    Description = ideaFileVM.Idea.Description,
+                    Content = ideaFileVM.Idea.Content,
                     UserId = currentU.Id,
                     CreateDate = DateTime.Now,
                     LastModifiedDate = DateTime.Now,
                     ApplicationUser = currentU,
-                    isAnon = idea.isAnon
+                    isAnon = ideaFileVM.Idea.isAnon
                 };
-                db.Ideas.Add(idea);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var submission = db.Submissions.Where(s => s.SubmissionId == id).FirstOrDefault();
+
+
+                if (submission.ClosureDate >= DateTime.Now)
+                {
+                    db.Ideas.Add(idea);
+                    db.SaveChanges();
+
+                    //find this idea in database
+                    var thisIdea = db.Ideas.Where(i => i.SubmissionId == id && i.UserId == currentU.Id && i.CategoryId == ideaFileVM.CategoryId )
+                        .OrderByDescending(i => i.IdeaId)
+                        .FirstOrDefault();
+                    //save file to server folder
+                    if (file != null)
+                    {
+                        if (file.ContentLength > 0)
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var filePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId);
+                            if (!Directory.Exists(filePath)) { Directory.CreateDirectory(filePath); }
+                            filePath = Path.Combine(filePath, fileName);
+                            file.SaveAs(filePath);
+
+                            //insrt file to db
+                            var newFile = new Models.File()
+                            {
+                                FilePath = Path.Combine(Server.MapPath("~/Files"), "submission_" + submission.SubmissionId, "idea_" + thisIdea.IdeaId, Path.GetFileName(file.FileName)),
+                                CreateDate = DateTime.Now,
+                                LastModifiedDate = DateTime.Now,
+                                Ideaid = thisIdea.IdeaId,
+                                Idea = thisIdea
+
+                            };
+
+                            db.Files.Add(newFile);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    //Send email to QA Coordinator
+                    string subject = $"New Idea has to submitted to your Department:  '{currentU.Departments.DepartmentName},' ";
+                    string content = $"{currentU.UserName} have submitted new Idea to Department '{currentU.Departments.DepartmentName},' ,\n\n" +
+                            $"Title: '{idea.Title}' in the submission '{idea.SubmissionId}',\n\n" +
+                                $"Content: '{idea.Content}'";
+                    repo.SendMail(currentU, content, subject);
+                }
+
+                return RedirectToAction("Index", new { id = id });
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", idea.CategoryId);
-            ViewBag.SubmissionId = new SelectList(db.Submissions, "SubmissionId", "SubmissionName", idea.SubmissionId);
-            return View(idea);
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "CategoryName", ideaFileVM.CategoryId);
+            ViewBag.SubmissionId = id;
+            return View(ideaFileVM);
         }
 
         // GET: Ideas/Edit/5
